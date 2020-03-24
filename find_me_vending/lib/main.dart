@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:findmevending/MainCard.dart';
 import 'package:findmevending/custom_icons_icons.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:findmevending/loginSignUp.dart';
 
 //important variables
 
@@ -199,7 +200,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ListTile(
               leading: Icon(CustomIcons.sign_in_alt_solid, color: Colors.black,),
               title: Text("Log In", style: TextStyle(fontSize: 15, fontFamily: 'Poppins'),),
-              onTap: () => {},
+              onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));},
             ),
             ListTile(
               leading: Icon(CustomIcons.user_plus_solid, color: Colors.black,),
