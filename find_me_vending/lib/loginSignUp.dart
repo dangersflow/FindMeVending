@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
@@ -39,13 +40,28 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Container loginScreen;
 
-    TextField username = TextField(controller: _uname, decoration: InputDecoration(labelText: "Email"), keyboardType: TextInputType.emailAddress,);
-    TextField password = TextField(controller: _pword, decoration: InputDecoration(labelText: "Password"), obscureText: true,);
+    TextField username = TextField(controller: _uname, style: TextStyle(fontFamily: 'Poppins'), decoration: InputDecoration(labelText: "Email"), keyboardType: TextInputType.emailAddress,);
+    TextField password = TextField(controller: _pword, style: TextStyle(fontFamily: 'Poppins'), decoration: InputDecoration(labelText: "Password"), obscureText: true,);
 
-    RaisedButton login = RaisedButton(child: Text("Log In"), onPressed: (){ _handleSignIn(context, _uname.text.toString(), _pword.text.toString()); });
+    RaisedButton login = RaisedButton(
+        child: Text("LOG IN", style: TextStyle(fontFamily: 'Poppins', color: Colors.white, fontSize: 18)),
+        color: Color(0xFF98BCBF),
+        onPressed: (){ _handleSignIn(context, _uname.text.toString(), _pword.text.toString()); }
+        );
 
-    loginScreen = Container(child: Column(children: [Text("Email"), username, Text("Password"), password, login]));
+    loginScreen = Container(
+      child: Column(
+          children: [Align(child: Text("Email", style: TextStyle(fontSize: 27)), alignment: Alignment.topLeft,), username, Spacer(), Align(child: Text("Password", style: TextStyle(fontSize: 27)), alignment: Alignment.topLeft,), password, Spacer(), Align(child: login, alignment: Alignment.topRight,), Spacer(flex: 15)],
+      ),
+      padding: EdgeInsets.all(20),
+    );
 
-    return Scaffold(appBar: AppBar(title: Text("Log In")), body: loginScreen);
+    return Scaffold(
+        appBar:
+          AppBar(
+            title: Text("Log In", style: TextStyle(fontSize: 27, color: Colors.white)),
+            iconTheme: IconThemeData(color: Colors.white),
+          ),
+        body: loginScreen);
   }
 }

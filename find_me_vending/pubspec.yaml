@@ -26,7 +26,6 @@ dependencies:
   flutter_icons: any
   cloud_firestore: any
   firebase_auth: any
-  firebase_core: ^0.4.0+9
 
 dev_dependencies:
   flutter_test:
