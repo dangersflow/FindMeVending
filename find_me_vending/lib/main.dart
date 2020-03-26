@@ -65,7 +65,7 @@ Map<int, Icon> iconSelect =
     4: Icon(CustomIcons.water, size: 100,)
   };
 
-//testing stuff!
+//testing stuff, though this is not going to be how the real thing looks like
 List<List<dynamic>> list = [
   ["Coke", 2],
   ["Doritos", 1],
