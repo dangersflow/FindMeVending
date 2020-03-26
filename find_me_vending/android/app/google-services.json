@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "381577087023",
+    "firebase_url": "https://findmevending-seniorproject.firebaseio.com",
+    "project_id": "findmevending-seniorproject",
+    "storage_bucket": "findmevending-seniorproject.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:381577087023:android:6e76a5441a83c06bd19eda",
+        "android_client_info": {
+          "package_name": "com.fandl.findmevending"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "381577087023-5sjo1nd0ah0plgj3pb77kh9p6si6niqu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNFsxwtg0PGmPZbURLPTvNVnl_l9SXZx8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "381577087023-5sjo1nd0ah0plgj3pb77kh9p6si6niqu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
