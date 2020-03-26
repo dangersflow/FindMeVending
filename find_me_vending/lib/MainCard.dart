@@ -32,7 +32,7 @@ class _MainCardState extends State<MainCard> {
                 Row(
                   children: <Widget>[
                     Container(
-                      child: Text("Drinks", style: TextStyle(fontFamily: 'Poppins', fontSize: 20, color: Colors.white),),
+                      child: Text(widget.title, style: TextStyle(fontFamily: 'Poppins', fontSize: 20, color: Colors.white),),
                       padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
                     )
                   ],

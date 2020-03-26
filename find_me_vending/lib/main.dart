@@ -50,12 +50,41 @@ Map<int, List<Color>> gradientSelect =
     4: [const Color(0xFF87DFFC), const Color(0xFFA9A9F6)]
   };
 
+Map<int, Icon> iconSelect =
+  {
+    //snacks
+    1: Icon(CustomIcons.snacks, size: 100,),
+    //drinks
+    2: Icon(CustomIcons.soda, size: 100,),
+    //restrooms
+    3: Icon(CustomIcons.restroom, size: 100,),
+    //water bottle fillers
+    4: Icon(CustomIcons.water, size: 100,)
+  };
+
 //testing stuff!
-List<MainCard> list = [
-  MainCard(icon: Icon(CustomIcons.soda, size: 100,), colorGradient: gradientSelect[2],),
-  MainCard(icon: Icon(CustomIcons.restroom, size: 100,), colorGradient: gradientSelect[3],),
-  MainCard(icon: Icon(CustomIcons.snacks, size: 100,), colorGradient: gradientSelect[1],),
-  MainCard(icon: Icon(CustomIcons.water, size: 100,), colorGradient: gradientSelect[4],)
+List<List<dynamic>> list = [
+  ["Coke", 2],
+  ["Doritos", 1],
+  ["Restrooms", 3],
+  ["Water", 4],
+  ["Diet Coke", 2]
+];
+
+List<List<dynamic>> listTest = [
+  ["Cherry Coke", 2],
+  ["Cookies", 1],
+  ["Water", 4],
+  ["Hot Cheetos", 1],
+  ["Coke", 2]
+];
+
+List<List<dynamic>> listTest2 = [
+  ["Diet Coke", 2],
+  ["Honey Bun", 1],
+  ["Water", 4],
+  ["Sprite", 2],
+  ["Lay's", 2]
 ];
 
 void main() => runApp(MyApp());
@@ -169,9 +198,13 @@ class _MyHomePageState extends State<MyHomePage> {
                       childAspectRatio: 0.8
                     ),
                     itemBuilder: (BuildContext context, int index) {
-                      return list[index];
+                      return MainCard(title: list[index][0], icon: iconSelect[list[index][1]], colorGradient: gradientSelect[list[index][1]],);
                     }
                     ),
+                Container(
+                  child: Divider(color: Colors.black, height: 50, ),
+                  padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                ),
                 Text("Trending", style: TextStyle(fontSize: 30),),
                 //cards
                 GridView.builder(
@@ -185,8 +218,12 @@ class _MyHomePageState extends State<MyHomePage> {
                         childAspectRatio: 0.8
                     ),
                     itemBuilder: (BuildContext context, int index) {
-                      return list[index];
+                      return MainCard(title: listTest[index][0], icon: iconSelect[listTest[index][1]], colorGradient: gradientSelect[listTest[index][1]],);
                     }
+                ),
+                Container(
+                  child: Divider(color: Colors.black, height: 50, ),
+                  padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
                 ),
                 Text("Recommended", style: TextStyle(fontSize: 30),),
                 //cards
@@ -201,12 +238,12 @@ class _MyHomePageState extends State<MyHomePage> {
                         childAspectRatio: 0.8
                     ),
                     itemBuilder: (BuildContext context, int index) {
-                      return list[index];
+                      return MainCard(title: listTest2[index][0], icon: iconSelect[listTest2[index][1]], colorGradient: gradientSelect[listTest2[index][1]],);
                     }
-                ),
+                )
               ],
             ),
-            padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
+            padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
           )
         ],
       ),
