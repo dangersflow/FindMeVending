@@ -40,10 +40,23 @@ MaterialColor mainBackgroundSwatch = MaterialColor(0xFFECECEC, mainBackgroundCol
 //map to select gradients based on type
 Map<int, List<Color>> gradientSelect =
   {
+    //snacks
     1: [const Color(0xFF9909C), const Color(0xFFF8B195)],
+    //drinks
     2: [const Color(0xFF9192FB), const Color(0xFFEAC0FF)],
-    3: [const Color(0xFF5AEF93), const Color(0xFFDFF494)]
+    //restrooms
+    3: [const Color(0xFF5AEF93), const Color(0xFFDFF494)],
+    //water bottle fillers
+    4: [const Color(0xFF87DFFC), const Color(0xFFA9A9F6)]
   };
+
+//testing stuff!
+List<MainCard> list = [
+  MainCard(icon: Icon(CustomIcons.soda, size: 100,), colorGradient: gradientSelect[2],),
+  MainCard(icon: Icon(CustomIcons.restroom, size: 100,), colorGradient: gradientSelect[3],),
+  MainCard(icon: Icon(CustomIcons.snacks, size: 100,), colorGradient: gradientSelect[1],),
+  MainCard(icon: Icon(CustomIcons.water, size: 100,), colorGradient: gradientSelect[4],)
+];
 
 void main() => runApp(MyApp());
 
@@ -145,13 +158,55 @@ class _MyHomePageState extends State<MyHomePage> {
                 //have 3 different card arrays for Near You, Recommended, and Trending?
                 Text("Near You", style: TextStyle(fontSize: 30),),
                 //this is just a test card, we'd probably want a gridview here for each main thing
-                MainCard(icon: Icon(CustomIcons.soda, size: 100,), colorGradient: gradientSelect[2],),
+                GridView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: list.length,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 5,
+                      mainAxisSpacing: 10,
+                      childAspectRatio: 0.8
+                    ),
+                    itemBuilder: (BuildContext context, int index) {
+                      return list[index];
+                    }
+                    ),
                 Text("Trending", style: TextStyle(fontSize: 30),),
-                Text("Recommended", style: TextStyle(fontSize: 30),)
-
+                //cards
+                GridView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: list.length,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 5,
+                        mainAxisSpacing: 10,
+                        childAspectRatio: 0.8
+                    ),
+                    itemBuilder: (BuildContext context, int index) {
+                      return list[index];
+                    }
+                ),
+                Text("Recommended", style: TextStyle(fontSize: 30),),
+                //cards
+                GridView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: list.length,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 5,
+                        mainAxisSpacing: 10,
+                        childAspectRatio: 0.8
+                    ),
+                    itemBuilder: (BuildContext context, int index) {
+                      return list[index];
+                    }
+                ),
               ],
             ),
-            padding: EdgeInsets.fromLTRB(20, 20, 0, 0),
+            padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
           )
         ],
       ),
