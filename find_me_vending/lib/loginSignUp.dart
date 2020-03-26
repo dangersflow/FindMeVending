@@ -16,20 +16,16 @@ class LoginScreen extends StatelessWidget {
   TextEditingController _pword = TextEditingController();
 
   Future<void> _handleSignIn(var context, String email, String password) async {
-    AlertDialog dialog = new AlertDialog(
-        content: new Text("Loading...")
+    _auth.signInWithEmailAndPassword(email: email, password: password)
+        .then((AuthResult auth) {})
+        .catchError((e) {
+      Navigator.pop(context);
+      showDialog(context: context,
+          builder: (BuildContext context) =>
+              AlertDialog(content: Text("Incorrect Password")));
+      return;
+    }
     );
-    showDialog(context: context, builder: (BuildContext context) => dialog);
-    _auth.signInWithEmailAndPassword(email: email, password: password);
-//        .then((FirebaseUser user) {
-//    }).catchError((e) {
-//      Navigator.pop(context);
-//      showDialog(context: context,
-//          builder: (BuildContext context) =>
-//              AlertDialog(content: Text("Incorrect Password")));
-//      return;
-//    }
-//    );
     Navigator.pop(context);
     Navigator.push(context, MaterialPageRoute(
         builder: (context) => MyApp()),
