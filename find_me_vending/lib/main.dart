@@ -3,8 +3,10 @@ import 'package:findmevending/MainCard.dart';
 import 'package:findmevending/custom_icons_icons.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:findmevending/loginSignUp.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 //important variables
+const String _appTitle = "FindMeVending";
 
 //main material color
 Map<int, Color> mainThemeColor =
@@ -53,7 +55,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'FindMeVending',
+      title: _appTitle,
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -67,13 +69,13 @@ class MyApp extends StatelessWidget {
         primarySwatch: mainColorSwatch,
         fontFamily: 'Darker Grotesque',
       ),
-      home: MyHomePage(title: 'FindMeVending'),
+      home: MyHomePage(title: _appTitle),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({Key key, this.title = _appTitle, this.auth, this.user}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -85,6 +87,8 @@ class MyHomePage extends StatefulWidget {
   // always marked "final".
 
   final String title;
+  FirebaseAuth auth;
+  FirebaseUser user;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -179,7 +183,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       backgroundColor: mainBackgroundSwatch,
       //cool drawer
-      drawer: Drawer(
+      drawer: widget.auth==null?Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
@@ -206,6 +210,48 @@ class _MyHomePageState extends State<MyHomePage> {
               leading: Icon(CustomIcons.user_plus_solid, color: Colors.black,),
               title: Text("Register", style: TextStyle(fontSize: 15, fontFamily: 'Poppins'),),
               onTap: () => {},
+            )
+          ],
+        ),
+      ):
+      Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            Container(
+              height: 130,
+              //ListTile in the header is kinda wonked, will fix
+              child: DrawerHeader(
+                child: Container(child: ListTile(
+                  leading: IconButton(icon: Icon(Icons.arrow_back, size: 27, color: Colors.white,)),
+                  title: Text(widget.user.displayName==null?"NAME":widget.user.displayName, style: TextStyle(fontSize: 27),),
+                  contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 15),)
+                ),
+                decoration: BoxDecoration(
+                  color: mainColorSwatch,
+                ),
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.add, color: Colors.black,),
+              title: Text("Make a Recommendation", style: TextStyle(fontSize: 15, fontFamily: 'Poppins'),),
+              onTap: (){},
+            ),
+            ListTile(
+              leading: Icon(Icons.pin_drop, color: Colors.black,),
+              title: Text("Recommendations Map", style: TextStyle(fontSize: 15, fontFamily: 'Poppins'),),
+              onTap: () => {},
+            ),
+            ListTile(
+              leading: Icon(Icons.arrow_back, color: Colors.black,),
+              title: Text("Log Out", style: TextStyle(fontSize: 15, fontFamily: 'Poppins'),),
+              onTap: (){
+                  widget.auth.signOut();
+                  super.setState((){
+                    widget.user = null;
+                    widget.auth = null;
+                  });
+                },
             )
           ],
         ),

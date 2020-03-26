@@ -17,18 +17,18 @@ class LoginScreen extends StatelessWidget {
 
   Future<void> _handleSignIn(var context, String email, String password) async {
     _auth.signInWithEmailAndPassword(email: email, password: password)
-        .then((AuthResult auth) {})
-        .catchError((e) {
+        .then((AuthResult auth) {
+          Navigator.pop(context);
+          Navigator.push(context, MaterialPageRoute(
+            builder: (context) => MyHomePage(auth: _auth, user: auth.user)),
+          );
+        }).catchError((e) {
       Navigator.pop(context);
       showDialog(context: context,
           builder: (BuildContext context) =>
               AlertDialog(content: Text("Incorrect Password")));
       return;
     }
-    );
-    Navigator.pop(context);
-    Navigator.push(context, MaterialPageRoute(
-        builder: (context) => MyApp()),
     );
   }
 
