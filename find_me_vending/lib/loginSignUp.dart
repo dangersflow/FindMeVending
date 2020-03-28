@@ -126,7 +126,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return user.uid;
   }
 
-  Future<void> _createUserDocument(String uid, String fname, String lname) async{
+  Future<void> _createUserDocument(String uid, String name) async{
     DocumentReference postRef = Firestore.instance.collection('users').document(uid);
     Firestore.instance.runTransaction((Transaction tx) async {
       DocumentSnapshot postSnapshot = await tx.get(postRef);
@@ -135,10 +135,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
       }
     });
     Firestore.instance.collection('users').document(uid)
-        .setData({ 'first_name': fname, 'last_name': lname, 'user_id': '$uid' });
+        .setData({ 'name': name, 'user_id': '$uid' });
   }
 
-  Future<bool> _newUser(var context, String email, String password, String password2, String first_name, String last_name) async{
+  Future<bool> _newUser(var context, String email, String password, String password2, String name) async{
     AlertDialog dialog = new AlertDialog(
         content: new Text("Loading")
     );
@@ -153,7 +153,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
     else{
       String id = await _createUser(email, password);
-      _createUserDocument(id, first_name, last_name);
+      _createUserDocument(id, name);
       Navigator.pop(context);
       _handleSignIn(context, email, password);
       return true;
@@ -172,7 +172,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     RaisedButton signUp = RaisedButton(
         child: Text("REGISTER", style: TextStyle(fontFamily: 'Poppins', color: Colors.white, fontSize: 18)),
         color: Color(0xFF98BCBF),
-        onPressed: (){}
+        onPressed: (){_newUser(context, _email.text, _pword.text, _pword2.text, _name.text);}
     );
 
     signupScreen = Container(
