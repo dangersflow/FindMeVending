@@ -209,7 +209,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ListTile(
               leading: Icon(CustomIcons.user_plus_solid, color: Colors.black,),
               title: Text("Register", style: TextStyle(fontSize: 15, fontFamily: 'Poppins'),),
-              onTap: () => {},
+              onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => SignUpScreen()));},
             )
           ],
         ),
