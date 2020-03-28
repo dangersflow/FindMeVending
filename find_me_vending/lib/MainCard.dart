@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:findmevending/custom_icons_icons.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
+import 'custom_icons_icons.dart';
+
 
 //cards are cool :)
 class MainCard extends StatefulWidget {
@@ -9,6 +11,7 @@ class MainCard extends StatefulWidget {
   String title;
   List<Color> colorGradient;
   Icon icon;
+  bool liked = false;
 
   @override
   _MainCardState createState() => _MainCardState();
@@ -20,7 +23,7 @@ class _MainCardState extends State<MainCard> {
   Widget build(BuildContext context) {
     return Container(
       child: SizedBox(
-        height: 200,
+        height: 220,
         width: 180,
         child: Card(
           child: Container(
@@ -28,7 +31,10 @@ class _MainCardState extends State<MainCard> {
               children: <Widget>[
                 Row(
                   children: <Widget>[
-                    Text("Drinks", style: TextStyle(fontFamily: 'Poppins', fontSize: 20, color: Colors.white),)
+                    Container(
+                      child: Text(widget.title, style: TextStyle(fontFamily: 'Poppins', fontSize: 20, color: Colors.white),),
+                      padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                    )
                   ],
                 ),
                 Row(
@@ -39,7 +45,19 @@ class _MainCardState extends State<MainCard> {
                 ),
                 Row(
                   children: <Widget>[
-                    Container(child: Icon(CustomIcons.heart_filled, color: Colors.white,),)
+                    Container(
+                      child: IconButton(
+                        icon: widget.liked ? Icon(CustomIcons.heart_filled, color: Colors.white,) : Icon(CustomIcons.heart, color: Colors.white,),
+                        highlightColor: Colors.black,
+                        onPressed: () => {
+                          setState(() => {
+                            widget.liked = !widget.liked
+                          })
+                        },
+                      ),
+                      width: 30,
+                      height: 30,
+                    )
                   ],
                   mainAxisAlignment: MainAxisAlignment.end,
                 )
@@ -58,6 +76,7 @@ class _MainCardState extends State<MainCard> {
             ),
           ),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+          elevation: 3.0,
         ),
       )
     );
