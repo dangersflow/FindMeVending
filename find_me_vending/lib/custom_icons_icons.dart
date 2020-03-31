@@ -20,13 +20,16 @@ class CustomIcons {
 
   static const _kFontFam = 'CustomIcons';
 
-  static const IconData soda = IconData(0xe800, fontFamily: _kFontFam);
-  static const IconData water = IconData(0xe801, fontFamily: _kFontFam);
-  static const IconData restroom = IconData(0xe802, fontFamily: _kFontFam);
-  static const IconData heart = IconData(0xe803, fontFamily: _kFontFam);
-  static const IconData heart_filled = IconData(0xe804, fontFamily: _kFontFam);
-  static const IconData back = IconData(0xe805, fontFamily: _kFontFam);
-  static const IconData sign_in_alt_solid = IconData(0xe806, fontFamily: _kFontFam);
-  static const IconData snacks = IconData(0xe807, fontFamily: _kFontFam);
-  static const IconData user_plus_solid = IconData(0xe808, fontFamily: _kFontFam);
+  static const IconData lavatory = IconData(0xe800, fontFamily: _kFontFam);
+  static const IconData restroom = IconData(0xe801, fontFamily: _kFontFam);
+  static const IconData sign_in_alt_solid = IconData(0xe802, fontFamily: _kFontFam);
+  static const IconData sign_out_alt_solid = IconData(0xe803, fontFamily: _kFontFam);
+  static const IconData snack = IconData(0xe804, fontFamily: _kFontFam);
+  static const IconData soda = IconData(0xe805, fontFamily: _kFontFam);
+  static const IconData user_plus_solid = IconData(0xe806, fontFamily: _kFontFam);
+  static const IconData water = IconData(0xe807, fontFamily: _kFontFam);
+  static const IconData restroom_solid = IconData(0xe808, fontFamily: _kFontFam);
+  static const IconData back = IconData(0xe809, fontFamily: _kFontFam);
+  static const IconData heart = IconData(0xe80a, fontFamily: _kFontFam);
+  static const IconData heart_filled = IconData(0xe80b, fontFamily: _kFontFam);
 }
