@@ -43,12 +43,8 @@ class _MapScreenState extends State<MapScreen> {
       ),
       layers: [
         new TileLayerOptions(
-          urlTemplate: "https://api.tiles.mapbox.com/v4/"
-              "{id}/{z}/{x}/{y}@2x.png?access_token={accessToken}",
-          additionalOptions: {
-            'accessToken': '<PUT_ACCESS_TOKEN_HERE>',
-            'id': 'mapbox.streets',
-          },
+            urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            subdomains: ['a', 'b', 'c'],
         ),
         new MarkerLayerOptions(
           markers: [
