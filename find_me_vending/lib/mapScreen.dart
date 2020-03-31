@@ -19,10 +19,9 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
-  // ADD THIS
+  //things needed for user location
   MapController mapController = MapController();
   UserLocationOptions userLocationOptions;
-  // ADD THIS
   List<Marker> markers = [];
   @override
   Widget build(BuildContext context) {
@@ -30,7 +29,9 @@ class _MapScreenState extends State<MapScreen> {
       context: context,
       mapController: mapController,
       markers: markers,
-      updateMapLocationOnPositionChange: false
+      updateMapLocationOnPositionChange: false,
+      //since it'll be mostly used at school, this could be convenient
+      zoomToCurrentLocationOnLoad: true,
     );
 
     return FlutterMap(
@@ -49,12 +50,15 @@ class _MapScreenState extends State<MapScreen> {
         new MarkerLayerOptions(
           markers: [
             new Marker(
-              width: 80.0,
-              height: 80.0,
+              height: 100.0,
+              width: 120.0,
               point: new LatLng(26.306167, -98.173148),
               builder: (ctx) =>
               new BubbleMarker(
-                bubbleColor: Colors.black,
+                bubbleColor: Colors.white,
+                bubbleContentWidgetBuilder: (BuildContext context) {
+                  return const Text("Name of Marker");
+                },
               ),
             ),
           ],
