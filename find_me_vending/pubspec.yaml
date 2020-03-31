@@ -26,6 +26,10 @@ dependencies:
   flutter_icons: any
   cloud_firestore: any
   firebase_auth: any
+  flutter_map: any
+  user_location: any
+  map_markers: any
+  latlong: any
 
 dev_dependencies:
   flutter_test:

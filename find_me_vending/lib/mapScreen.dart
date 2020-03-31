@@ -4,6 +4,11 @@ import 'package:findmevending/custom_icons_icons.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:findmevending/loginSignUp.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:map_markers/map_markers.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map/plugin_api.dart';
+import 'package:user_location/user_location.dart';
+import 'package:latlong/latlong.dart';
 
 class MapScreen extends StatefulWidget {
   MapScreen({this.key});
@@ -14,10 +19,54 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
+  // ADD THIS
+  MapController mapController = MapController();
+  UserLocationOptions userLocationOptions;
+  // ADD THIS
+  List<Marker> markers = [];
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text("Map Screen"),
+    userLocationOptions = UserLocationOptions(
+      context: context,
+      mapController: mapController,
+      markers: markers,
+      updateMapLocationOnPositionChange: false
+    );
+
+    return FlutterMap(
+      options: new MapOptions(
+        center: new LatLng(26.306167, -98.173148),
+        zoom: 13.0,
+        plugins: [
+          UserLocationPlugin(),
+        ]
+      ),
+      layers: [
+        new TileLayerOptions(
+          urlTemplate: "https://api.tiles.mapbox.com/v4/"
+              "{id}/{z}/{x}/{y}@2x.png?access_token={accessToken}",
+          additionalOptions: {
+            'accessToken': '<PUT_ACCESS_TOKEN_HERE>',
+            'id': 'mapbox.streets',
+          },
+        ),
+        new MarkerLayerOptions(
+          markers: [
+            new Marker(
+              width: 80.0,
+              height: 80.0,
+              point: new LatLng(26.306167, -98.173148),
+              builder: (ctx) =>
+              new BubbleMarker(
+                bubbleColor: Colors.black,
+              ),
+            ),
+          ],
+        ),
+        MarkerLayerOptions(markers: markers),
+        userLocationOptions,
+      ],
+      mapController: mapController,
     );
   }
 }
