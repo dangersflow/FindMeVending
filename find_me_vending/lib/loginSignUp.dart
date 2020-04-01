@@ -134,8 +134,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
         return;
       }
     });
-    Firestore.instance.collection('users').document(uid)
-        .setData({ 'name': name, 'user_id': '$uid' });
+    await Firestore.instance.collection('users').document(uid)
+        .setData({ 'name': name, 'user_id': '$uid', 'favorites': [], 'points': 0 });
   }
 
   Future<bool> _newUser(var context, String email, String password, String password2, String name) async{
