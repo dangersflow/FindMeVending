@@ -4,28 +4,32 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:findmevending/main.dart';
+import 'package:findmevending/organizing_classes/user.dart';
 
 Color textFieldColor = Colors.grey[350];
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
-FirebaseUser user;
 
 Future<void> signOut() async{
   return _auth.signOut();
 }
 
 Future<void> _handleSignIn(var context, String email, String password) async {
+  User user = testUser;
   _auth.signInWithEmailAndPassword(email: email, password: password)
-      .then((AuthResult auth) {
-    Navigator.pop(context);
-    Navigator.push(context, MaterialPageRoute(
-        builder: (context) => MyHomePage(auth: _auth, user: auth.user)),
+      .then((AuthResult auth) async{
+    DocumentReference postRef = Firestore.instance.collection('users').document(auth.user.uid);
+    User user;
+    user = User(doc: postRef);
+        Navigator.pop(context);
+        Navigator.push(context, MaterialPageRoute(
+            builder: (context) => MyHomePage(auth: _auth, user: user)),
     );
   }).catchError((e) {
     Navigator.pop(context);
     showDialog(context: context,
         builder: (BuildContext context) =>
-            AlertDialog(content: Text("Incorrect Password")));
+            AlertDialog(content: Text("${e.message}")));
     return;
   }
   );
@@ -39,8 +43,8 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Container loginScreen;
 
-    TextField email = TextField(controller: _email, style: TextStyle(fontFamily: 'Poppins'), keyboardType: TextInputType.emailAddress,);
-    TextField password = TextField(controller: _pword, style: TextStyle(fontFamily: 'Poppins'), obscureText: true,);
+    TextField email = TextField(controller: _email, style: TextStyle(fontFamily: 'Poppins'), decoration: InputDecoration(fillColor: textFieldColor, filled: true), keyboardType: TextInputType.emailAddress,);
+    TextField password = TextField(controller: _pword, style: TextStyle(fontFamily: 'Poppins'), decoration: InputDecoration(fillColor: textFieldColor, filled: true), obscureText: true,);
 
     RaisedButton login = RaisedButton(
         child: Text("LOG IN", style: TextStyle(fontFamily: 'Poppins', color: Colors.white, fontSize: 18)),
@@ -134,8 +138,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
         return;
       }
     });
-    Firestore.instance.collection('users').document(uid)
-        .setData({ 'name': name, 'user_id': '$uid' });
+    await Firestore.instance.collection('users').document(uid)
+        .setData({ 'name': name, 'user_id': '$uid', 'favorites': [], 'points': 0 });
   }
 
   Future<bool> _newUser(var context, String email, String password, String password2, String name) async{

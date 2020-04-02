@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:findmevending/MainCard.dart';
 import 'package:findmevending/custom_icons_icons.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:findmevending/loginSignUp.dart';
@@ -8,6 +7,7 @@ import 'package:findmevending/homeScreen.dart';
 import 'package:findmevending/profileScreen.dart';
 import 'package:findmevending/mapScreen.dart';
 import 'package:statusbar/statusbar.dart';
+import 'package:findmevending/organizing_classes/user.dart';
 
 //important variables
 const String _appTitle = "FindMeVending";
@@ -84,7 +84,12 @@ class MyHomePage extends StatefulWidget {
 
   final String title;
   FirebaseAuth auth;
-  FirebaseUser user;
+  User user;
+
+  void quickRefresh({User user, FirebaseAuth auth}) {
+    user = user;
+    auth = auth;
+  }
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -115,8 +120,17 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final PageStorageBucket bucket = PageStorageBucket();
 
+  void quickRefresh(){
+    super.setState((){widget.quickRefresh();});
+  }
+
   @override
   Widget build(BuildContext context) {
+    if(widget.user != null) {
+      if (widget.user.uid == "0000001" || widget.user.uid == null) {
+       quickRefresh();
+      }
+    }
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
@@ -213,7 +227,8 @@ class _MyHomePageState extends State<MyHomePage> {
               child: DrawerHeader(
                 child: Container(child: ListTile(
                   leading: IconButton(icon: Icon(Icons.arrow_back, size: 27, color: Colors.white,)),
-                  title: Text(widget.user.displayName==null?"NAME":widget.user.displayName, style: TextStyle(fontSize: 27),),
+                  // TODO: Fix name display, shows Template Message on first pass, but on moving to another page it updates to correct name. Something to do with futures
+                  title: Text(widget.user == null || widget.user.name == null ? "Try again in a moment" : widget.user.name, style: TextStyle(fontSize: 27),),
                   contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 15),)
                 ),
                 decoration: BoxDecoration(
