@@ -30,6 +30,7 @@ dependencies:
   user_location: any
   map_markers: any
   latlong: any
+  statusbar: any
 
 dev_dependencies:
   flutter_test:

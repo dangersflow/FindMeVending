@@ -23,6 +23,12 @@ class _MapScreenState extends State<MapScreen> {
   MapController mapController = MapController();
   UserLocationOptions userLocationOptions;
   List<Marker> markers = [];
+
+  //booleans
+  bool drinksSelected = false;
+  bool snacksSelected = false;
+  bool waterSelected = false;
+  bool restroomSelected = false;
   @override
   Widget build(BuildContext context) {
     userLocationOptions = UserLocationOptions(
@@ -34,39 +40,109 @@ class _MapScreenState extends State<MapScreen> {
       zoomToCurrentLocationOnLoad: true,
     );
 
-    return FlutterMap(
-      options: new MapOptions(
-        center: new LatLng(26.306167, -98.173148),
-        zoom: 13.0,
-        plugins: [
-          UserLocationPlugin(),
-        ]
-      ),
-      layers: [
-        new TileLayerOptions(
-            urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-            subdomains: ['a', 'b', 'c'],
-        ),
-        new MarkerLayerOptions(
-          markers: [
-            new Marker(
-              height: 100.0,
-              width: 120.0,
-              point: new LatLng(26.306167, -98.173148),
-              builder: (ctx) =>
-              new BubbleMarker(
-                bubbleColor: Colors.white,
-                bubbleContentWidgetBuilder: (BuildContext context) {
-                  return const Text("Name of Marker");
-                },
+    return Container(
+      child: Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              ChoiceChip(
+                  label: Text("Drinks"),
+                  onSelected: (bool value) {
+                    setState(() {
+                      drinksSelected = !drinksSelected;
+                    });
+                  },
+                  elevation: drinksSelected ? 5 : 0,
+                  selected: drinksSelected,
+                  selectedColor: Color(0xFFFFBB97),
+                  labelStyle: TextStyle(color: Colors.black, fontFamily: "Poppins"),
+                  backgroundColor: Colors.transparent,
+                  shape: StadiumBorder(side: BorderSide(color: drinksSelected ? Color(0xFFF57C00) : Colors.grey)),
               ),
+              ChoiceChip(
+                label: Text("Snacks"),
+                onSelected: (bool value) {
+                  setState(() {
+                    snacksSelected = !snacksSelected;
+                  });
+                },
+                elevation: snacksSelected ? 5 : 0,
+                selected: snacksSelected,
+                selectedColor: Color(0xFFFFBB97),
+                labelStyle: TextStyle(color: Colors.black, fontFamily: "Poppins"),
+                backgroundColor: Colors.transparent,
+                shape: StadiumBorder(side: BorderSide(color: snacksSelected ? Color(0xFFF57C00) : Colors.grey)),
+              ),
+              ChoiceChip(
+                label: Text("Water"),
+                onSelected: (bool value) {
+                  setState(() {
+                    waterSelected = !waterSelected;
+                  });
+                },
+                elevation: waterSelected ? 5 : 0,
+                selected: waterSelected,
+                selectedColor: Color(0xFFFFBB97),
+                labelStyle: TextStyle(color: Colors.black, fontFamily: "Poppins"),
+                backgroundColor: Colors.transparent,
+                shape: StadiumBorder(side: BorderSide(color: waterSelected ? Color(0xFFF57C00) : Colors.grey)),
+              ),
+              ChoiceChip(
+                label: Text("Restroom"),
+                onSelected: (bool value) {
+                  setState(() {
+                    restroomSelected = !restroomSelected;
+                  });
+                },
+                elevation: restroomSelected ? 5 : 0,
+                selected: restroomSelected,
+                selectedColor: Color(0xFFFFBB97),
+                labelStyle: TextStyle(color: Colors.black, fontFamily: "Poppins"),
+                backgroundColor: Colors.transparent,
+                shape: StadiumBorder(side: BorderSide(color: restroomSelected ? Color(0xFFF57C00) : Colors.grey)),
+              )
+            ],
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          ),
+          Container(
+            child: FlutterMap(
+              options: new MapOptions(
+                  center: new LatLng(26.306167, -98.173148),
+                  zoom: 13.0,
+                  plugins: [
+                    UserLocationPlugin(),
+                  ]
+              ),
+              layers: [
+                new TileLayerOptions(
+                  urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                  subdomains: ['a', 'b', 'c'],
+                ),
+                new MarkerLayerOptions(
+                  markers: [
+                    new Marker(
+                      height: 100.0,
+                      width: 120.0,
+                      point: new LatLng(26.306167, -98.173148),
+                      builder: (ctx) =>
+                      new BubbleMarker(
+                        bubbleColor: Colors.white,
+                        bubbleContentWidgetBuilder: (BuildContext context) {
+                          return const Text("Name of Marker");
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                MarkerLayerOptions(markers: markers),
+                userLocationOptions,
+              ],
+              mapController: mapController,
             ),
-          ],
-        ),
-        MarkerLayerOptions(markers: markers),
-        userLocationOptions,
-      ],
-      mapController: mapController,
+            height: 300,
+          )
+        ],
+      ),
     );
   }
 }

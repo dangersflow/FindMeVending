@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:findmevending/homeScreen.dart';
 import 'package:findmevending/profileScreen.dart';
 import 'package:findmevending/mapScreen.dart';
+import 'package:statusbar/statusbar.dart';
 
 //important variables
 const String _appTitle = "FindMeVending";
@@ -93,6 +94,13 @@ class _MyHomePageState extends State<MyHomePage> {
   //stuff for bottom nav bar
   int _selectedIndex = 0;
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    StatusBar.color(Color(0xFF98BCBF));
+  }
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -139,6 +147,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: PageStorage(
         child: _widgetOptions[_selectedIndex],
         bucket: bucket,
+
       ),
       //classic bottom nav bar :)
       bottomNavigationBar: BottomNavigationBar(
@@ -160,6 +169,7 @@ class _MyHomePageState extends State<MyHomePage> {
         selectedItemColor: Colors.white,
         onTap: _onItemTapped,
         backgroundColor: mainColorSwatch,
+
       ),
       backgroundColor: mainBackgroundSwatch,
       //cool drawer
