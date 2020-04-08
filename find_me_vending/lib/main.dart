@@ -7,7 +7,14 @@ import 'package:findmevending/homeScreen.dart';
 import 'package:findmevending/profileScreen.dart';
 import 'package:findmevending/mapScreen.dart';
 import 'package:statusbar/statusbar.dart';
+import 'package:user_location/user_location.dart';
+import 'package:latlong/latlong.dart';
+import 'package:flutter_map/plugin_api.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:findmevending/organizing_classes/user.dart';
+import 'package:map_markers/map_markers.dart';
+import 'package:findmevending/organizing_classes/location_entry.dart';
+
 
 //important variables
 const String _appTitle = "FindMeVending";
@@ -43,6 +50,49 @@ Map<int, Color> mainBackgroundColor =
 
 //material color to be used
 MaterialColor mainBackgroundSwatch = MaterialColor(0xFFECECEC, mainBackgroundColor);
+
+//test data
+List<Entry> masterList = [
+  Entry("000001", 0, 26.306167, -98.173148, "N/A", "ACADEMICSER", ""),
+  Entry("000002", 0, 26.306587, -98.173738, "N/A", "UNIVLIB", ""),
+  Entry("000003", 0, 26.307366, -98.176488, "N/A", "ELABN 1.104", ""),
+  Entry("000004", 0, 26.306722, -98.175308, "N/A", "EIEAB 1.203", ""),
+  Entry("000005", 1, 26.306934, -98.173602, "N/A", "UNIVLIB", ""),
+  Entry("000006", 1, 26.306184, -98.176220, "N/A", "ELABS 1.102", ""),
+  Entry("000007", 1, 26.306492, -98.172197, "N/A", "SCIENCEBUIL", ""),
+  Entry("000008", 1, 26.307348, -98.175276, "N/A", "EHABW 1.109", ""),
+  Entry("000009", 2, 26.304761, -98.174267, "N/A", "STUDENTSERV", ""),
+  Entry("000010", 2, 26.305377, -98.175276, "N/A", "STUDENTUNIO", ""),
+  Entry("000011", 2, 26.306675, -98.174203, "N/A", "UNIVLIB", ""),
+  Entry("000012", 2, 26.307762, -98.171789, "N/A", "EDUCOMPLEX", ""),
+  Entry("000013", 3, 26.305771, -98.171660, "N/A", "EENGR 1.106", ""),
+  Entry("000014", 3, 26.306925, -98.170212, "N/A", "EFIELDHOUSE", ""),
+  Entry("000015", 3, 26.309214, -98.175051, "N/A", "HEALTHCENTE", ""),
+  Entry("000016", 3, 26.307685, -98.178001, "N/A", "UNITYHALL", ""),
+];
+
+List<Marker> markers = [];
+List<Marker> drinkMarkers = [
+  Marker(
+    height: 100.0,
+    width: 120.0,
+    point: new LatLng(26.306167, -98.173148),
+    builder: (ctx) =>
+    new BubbleMarker(
+      bubbleColor: Colors.white,
+      bubbleContentWidgetBuilder: (BuildContext context) {
+        return const Text("Name of Marker");
+      },
+    ),
+  )
+];
+
+Map<int, Color> colorSelect = {
+  0: const Color(0xFFF69D9D),
+  1: const Color(0xFF9192FB),
+  2: const Color(0xFF5AEF93),
+  3: const Color(0xFF87DFFC)
+};
 
 void main() => runApp(MyApp());
 
@@ -104,6 +154,26 @@ class _MyHomePageState extends State<MyHomePage> {
     // TODO: implement initState
     super.initState();
     StatusBar.color(Color(0xFF98BCBF));
+
+    //for every location in the master list, create a marker to send to the map screen
+    for(int i = 0; i < masterList.length; i++){
+      markers.add(new Marker(
+        height: 100.0,
+        width: 120.0,
+        point: new LatLng(masterList[i].lat, masterList[i].long),
+        builder: (ctx) =>
+        new BubbleMarker(
+          bubbleColor: colorSelect[masterList[i].type],
+          bubbleContentWidgetBuilder: (BuildContext context) {
+            return Text(masterList[i].id);
+          },
+          widgetBuilder: (BuildContext context) {
+            return Icon(Icons.location_on,
+                color: colorSelect[masterList[i].type]);
+          }
+        ),
+      ));
+    }
   }
 
   void _onItemTapped(int index) {
@@ -115,7 +185,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final List<Widget> _widgetOptions = <Widget>[
     HomeScreen(key: PageStorageKey("Page1"),),
     ProfileScreen(key: PageStorageKey("Page2"),),
-    MapScreen(key: PageStorageKey("Page3"),)
+    MapScreen(key: PageStorageKey("Page3"), markers: markers,)
   ];
 
   final PageStorageBucket bucket = PageStorageBucket();
@@ -196,6 +266,7 @@ class _MyHomePageState extends State<MyHomePage> {
               //ListTile in the header is kinda wonked, will fix
               child: DrawerHeader(
                 child: Container(child: ListTile(
+                  leading: IconButton(icon: Icon(Icons.arrow_back, size: 27, color: Colors.black,)),
                   title: Text("Guest", style: TextStyle(fontSize: 27),),
                   contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 15),)
                 ),
@@ -226,7 +297,7 @@ class _MyHomePageState extends State<MyHomePage> {
               //ListTile in the header is kinda wonked, will fix
               child: DrawerHeader(
                 child: Container(child: ListTile(
-                  leading: IconButton(icon: Icon(Icons.arrow_back, size: 27, color: Colors.white,)),
+                  leading: IconButton(icon: Icon(Icons.arrow_back, size: 27, color: Colors.black,)),
                   // TODO: Fix name display, shows Template Message on first pass, but on moving to another page it updates to correct name. Something to do with futures
                   title: Text(widget.user == null || widget.user.name == null ? "Try again in a moment" : widget.user.name, style: TextStyle(fontSize: 27),),
                   contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 15),)

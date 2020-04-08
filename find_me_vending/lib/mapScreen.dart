@@ -11,9 +11,10 @@ import 'package:user_location/user_location.dart';
 import 'package:latlong/latlong.dart';
 
 class MapScreen extends StatefulWidget {
-  MapScreen({this.key});
+  MapScreen({this.key, this.markers});
 
   PageStorageKey key;
+  List<Marker> markers;
   @override
   _MapScreenState createState() => _MapScreenState();
 }
@@ -29,6 +30,13 @@ class _MapScreenState extends State<MapScreen> {
   bool snacksSelected = false;
   bool waterSelected = false;
   bool restroomSelected = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    markers = widget.markers;
+  }
   @override
   Widget build(BuildContext context) {
     userLocationOptions = UserLocationOptions(
@@ -37,7 +45,7 @@ class _MapScreenState extends State<MapScreen> {
       markers: markers,
       updateMapLocationOnPositionChange: false,
       //since it'll be mostly used at school, this could be convenient
-      zoomToCurrentLocationOnLoad: true,
+      zoomToCurrentLocationOnLoad: false,
     );
 
     return Container(
@@ -119,20 +127,7 @@ class _MapScreenState extends State<MapScreen> {
                   subdomains: ['a', 'b', 'c'],
                 ),
                 new MarkerLayerOptions(
-                  markers: [
-                    new Marker(
-                      height: 100.0,
-                      width: 120.0,
-                      point: new LatLng(26.306167, -98.173148),
-                      builder: (ctx) =>
-                      new BubbleMarker(
-                        bubbleColor: Colors.white,
-                        bubbleContentWidgetBuilder: (BuildContext context) {
-                          return const Text("Name of Marker");
-                        },
-                      ),
-                    ),
-                  ],
+                  markers: markers
                 ),
                 MarkerLayerOptions(markers: markers),
                 userLocationOptions,

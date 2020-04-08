@@ -32,11 +32,10 @@ Map<int, Icon> iconSelect =
 
 //testing stuff, though this is not going to be how the real thing looks like
 List<List<dynamic>> list = [
-  ["Coke", 2],
-  ["Doritos", 1],
+  ["Drinks", 2],
+  ["Snacks", 1],
   ["Restrooms", 3],
   ["Water", 4],
-  ["Diet Coke", 2]
 ];
 
 List<List<dynamic>> listTest = [
