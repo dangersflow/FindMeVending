@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:findmevending/main.dart';
-import 'package:findmevending/organizing_classes/user.dart';
+import 'package:findmevending/organizing_classes/UserEntry.dart';
 
 Color textFieldColor = Colors.grey[350];
 
@@ -43,8 +43,8 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Container loginScreen;
 
-    TextField email = TextField(controller: _email, style: TextStyle(fontFamily: 'Poppins'), decoration: InputDecoration(fillColor: textFieldColor, filled: true), keyboardType: TextInputType.emailAddress,);
-    TextField password = TextField(controller: _pword, style: TextStyle(fontFamily: 'Poppins'), decoration: InputDecoration(fillColor: textFieldColor, filled: true), obscureText: true,);
+    TextField email = TextField(controller: _email, style: TextStyle(fontFamily: 'Poppins'), decoration: InputDecoration(filled: true, fillColor: textFieldColor, border: OutlineInputBorder()), keyboardType: TextInputType.emailAddress,);
+    TextField password = TextField(controller: _pword, style: TextStyle(fontFamily: 'Poppins'), decoration: InputDecoration(filled: true, fillColor: textFieldColor, border: OutlineInputBorder()), obscureText: true,);
 
     RaisedButton login = RaisedButton(
         child: Text("LOG IN", style: TextStyle(fontFamily: 'Poppins', color: Colors.white, fontSize: 18)),
@@ -168,10 +168,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     Container signupScreen;
 
-    TextField email = TextField(controller: _email, style: TextStyle(fontFamily: 'Poppins'), decoration: InputDecoration(fillColor: textFieldColor, filled: true), keyboardType: TextInputType.emailAddress,);
-    TextField name = TextField(controller: _name, style: TextStyle(fontFamily: 'Poppins'), decoration: InputDecoration(fillColor: textFieldColor, filled: true), keyboardType: TextInputType.text);
-    TextField password = TextField(controller: _pword, style: TextStyle(fontFamily: 'Poppins'), decoration: InputDecoration(fillColor: textFieldColor, filled: true, suffixIcon: IconButton(icon: Icon(Icons.remove_red_eye), onPressed: (){passwordButtonPressed(0);})), obscureText: _pwordObscure,);
-    TextField password2 = TextField(controller: _pword2, style: TextStyle(fontFamily: 'Poppins'), decoration: InputDecoration(fillColor: textFieldColor, filled: true, suffixIcon: IconButton(icon: Icon(Icons.remove_red_eye), onPressed: (){passwordButtonPressed(1);})), obscureText: _pword2Obscure,);
+    TextField email = TextField(controller: _email, style: TextStyle(fontFamily: 'Poppins'), decoration: InputDecoration(filled: true, fillColor: textFieldColor, border: OutlineInputBorder()), keyboardType: TextInputType.emailAddress,);
+    TextField name = TextField(controller: _name, style: TextStyle(fontFamily: 'Poppins'), decoration: InputDecoration(filled: true, fillColor: textFieldColor, border: OutlineInputBorder()), keyboardType: TextInputType.text);
+    TextField password = TextField(controller: _pword, style: TextStyle(fontFamily: 'Poppins'), decoration: InputDecoration(fillColor: textFieldColor, filled: true, border: OutlineInputBorder(), suffixIcon: IconButton(icon: Icon(Icons.remove_red_eye), onPressed: (){passwordButtonPressed(0);})), obscureText: _pwordObscure,);
+    TextField password2 = TextField(controller: _pword2, style: TextStyle(fontFamily: 'Poppins'), decoration: InputDecoration(fillColor: textFieldColor, filled: true, border: OutlineInputBorder(), suffixIcon: IconButton(icon: Icon(Icons.remove_red_eye), onPressed: (){passwordButtonPressed(1);})), obscureText: _pword2Obscure,);
 
     RaisedButton signUp = RaisedButton(
         child: Text("REGISTER", style: TextStyle(fontFamily: 'Poppins', color: Colors.white, fontSize: 18)),
