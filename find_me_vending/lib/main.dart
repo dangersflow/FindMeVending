@@ -12,12 +12,12 @@ import 'package:user_location/user_location.dart';
 import 'package:latlong/latlong.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:findmevending/organizing_classes/user.dart';
+import 'package:findmevending/organizing_classes/UserEntry.dart';
 import 'package:map_markers/map_markers.dart';
-import 'package:findmevending/organizing_classes/location_entry.dart';
+import 'package:findmevending/organizing_classes/LocationEntry.dart';
 import 'package:findmevending/organizing_classes/FountainEntry.dart';
 import 'package:findmevending/organizing_classes/RestroomEntry.dart';
-import 'package:findmevending/organizing_classes/vending.dart';
+import 'package:findmevending/organizing_classes/VendingEntry.dart';
 import 'package:findmevending/organizing_classes/UserEntry.dart';
 
 //important variables
