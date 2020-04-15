@@ -1,3 +1,5 @@
+import 'package:findmevending/main.dart';
+import 'package:findmevending/organizing_classes/location_entry.dart';
 import 'package:flutter/material.dart';
 import 'package:findmevending/MainCard.dart';
 import 'package:findmevending/custom_icons_icons.dart';
@@ -10,11 +12,14 @@ import 'package:flutter_map/plugin_api.dart';
 import 'package:user_location/user_location.dart';
 import 'package:latlong/latlong.dart';
 
+//global vars
+
 class MapScreen extends StatefulWidget {
-  MapScreen({this.key, this.markers});
+  MapScreen({this.key, this.markers, this.masterList});
 
   PageStorageKey key;
   List<Marker> markers;
+  List<Entry> masterList;
   @override
   _MapScreenState createState() => _MapScreenState();
 }
@@ -23,20 +28,42 @@ class _MapScreenState extends State<MapScreen> {
   //things needed for user location
   MapController mapController = MapController();
   UserLocationOptions userLocationOptions;
+
+  //markers
   List<Marker> markers = [];
+  List<Marker> snackMarkers = [];
+  List<Marker> drinkMarkers = [];
+  List<Marker> restRoomMarkers = [];
+  List<Marker> waterFillMarkers = [];
+
+  //entry lists
+  List<Entry> masterList = [];
+  List<Entry> snackList = [];
+  List<Entry> drinkList = [];
+  List<Entry> restRoomList = [];
+  List<Entry> waterFillList = [];
+  List<Entry> searchQueryList = [];
 
   //booleans
-  bool drinksSelected = false;
-  bool snacksSelected = false;
-  bool waterSelected = false;
-  bool restroomSelected = false;
+  bool drinksSelected = true;
+  bool snacksSelected = true;
+  bool waterSelected = true;
+  bool restroomSelected = true;
+
+  void removeSnacks(){
+
+  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     markers = widget.markers;
+    masterList = widget.masterList;
   }
+
+
+
   @override
   Widget build(BuildContext context) {
     userLocationOptions = UserLocationOptions(
@@ -135,6 +162,49 @@ class _MapScreenState extends State<MapScreen> {
               mapController: mapController,
             ),
             height: 300,
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: masterList.length,
+              shrinkWrap: true,
+              itemBuilder: (BuildContext context, int index) {
+                return Column(
+                  children: <Widget>[
+                    ListTile(
+                      title: Text(masterList[index].buildingCode),
+                      leading: CircleAvatar(backgroundColor: colorSelect[masterList[index].type], child: Text(masterList[index].buildingCode[0], style: TextStyle(color: Colors.white, fontSize: 20,),),),
+                      subtitle: Column(
+                        children: <Widget>[
+                          Text("TEST"),
+                          Row(
+                            children: <Widget>[
+                              Container(
+                                child: Container(child: Icon(Icons.keyboard_arrow_up, color: Colors.black54)),
+                                height: 25,
+                                width: 25,
+                                alignment: Alignment.centerLeft,
+                              ),
+                              Text("+4", style: TextStyle(color: Colors.black),),
+                              Container(
+                                child: Container(child: Icon(Icons.keyboard_arrow_down, color: Colors.black54)),
+                                height: 25,
+                                width: 25,
+                                alignment: Alignment.centerLeft,
+                              )
+                            ],
+                            mainAxisAlignment: MainAxisAlignment.start,
+                          )
+                        ],
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                      ),
+                      onTap: (){},
+                      trailing: Icon(CustomIcons.heart_filled),
+                    ),
+                    Divider(color: Colors.black54, endIndent: 15, indent: 15,)
+                  ],
+                );
+              },
+            ),
           )
         ],
       ),
