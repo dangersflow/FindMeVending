@@ -1,4 +1,6 @@
-import 'package:findmevending/organizing_classes/location_entry.dart';
+import 'package:findmevending/organizing_classes/LocationEntry.dart';
+
+const List<String> fountainStatuses = <String>["Water Refiller"];
 
 class WaterFountainEntry extends Entry{
   var included = [];
@@ -7,7 +9,7 @@ class WaterFountainEntry extends Entry{
     super(id, 3, lat, long, imageUrl, buildingCode, loc);
 }
 
-WaterFountainEntry testRestroom =
+WaterFountainEntry testFountain =
 WaterFountainEntry("QAFSLyzgl45YPPWhDZQd",
     26.305, // + N, - S
     -98.176, // + E, - W

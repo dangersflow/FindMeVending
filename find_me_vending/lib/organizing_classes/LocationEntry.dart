@@ -1,3 +1,7 @@
+import 'package:findmevending/organizing_classes/VendingEntry.dart';
+import 'package:findmevending/organizing_classes/FountainEntry.dart';
+import 'package:findmevending/organizing_classes/RestroomEntry.dart';
+
 class Entry {
   double lat;
   double long;
@@ -9,3 +13,5 @@ class Entry {
 
   Entry(this.id, this.type, this.lat, this.long, this.imageUrl, this.buildingCode, this.loc);
 }
+
+List<Entry> entries = <Entry>[testVending, testFountain, testRestroom];

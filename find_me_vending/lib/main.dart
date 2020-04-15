@@ -1,3 +1,4 @@
+import 'package:findmevending/NewPinScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:findmevending/custom_icons_icons.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -17,7 +18,7 @@ import 'package:findmevending/organizing_classes/location_entry.dart';
 import 'package:findmevending/organizing_classes/FountainEntry.dart';
 import 'package:findmevending/organizing_classes/RestroomEntry.dart';
 import 'package:findmevending/organizing_classes/vending.dart';
-
+import 'package:findmevending/organizing_classes/UserEntry.dart';
 
 //important variables
 const String _appTitle = "FindMeVending";
@@ -323,7 +324,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ListTile(
               leading: Icon(Icons.add, color: Colors.black,),
               title: Text("Make a Recommendation", style: TextStyle(fontSize: 15, fontFamily: 'Poppins'),),
-              onTap: (){},
+              onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => NewPinScreen()));},
             ),
             ListTile(
               leading: Icon(Icons.pin_drop, color: Colors.black,),

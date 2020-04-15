@@ -1,4 +1,6 @@
-import 'package:findmevending/organizing_classes/location_entry.dart';
+import 'package:findmevending/organizing_classes/LocationEntry.dart';
+
+const List<String> restroomStatuses = <String>["Mens", "Womens", "Private Room", "Nursing Room"];
 
 class RestroomEntry extends Entry{
   var included = [];

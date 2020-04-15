@@ -1,4 +1,6 @@
-import 'package:findmevending/organizing_classes/location_entry.dart';
+import 'package:findmevending/organizing_classes/LocationEntry.dart';
+
+const List<String> vendingStatuses = ["Out of Order", "Cash Only", "Low Stock"];
 
 class VendingEntry extends Entry{
   var included = [];
@@ -16,5 +18,5 @@ VendingEntry testVending =
       "EACSB",
       "Outside the building entrance facing the library",
       ["0OR7XjIB2Qb6b7NXxdiH", "7X1g0VSrP5jEeTm1PQ9p", "Su8xIJ8PnV2AKgauJnxn", "Xg74xZwcZeCIaiZclhhM", "XjnczgaC55YofmGE0Rk3", "mm5JbJwarDBehZqbrAWS"],
-      [false, false]
+      [false, false] // out of order, cash only
   );
