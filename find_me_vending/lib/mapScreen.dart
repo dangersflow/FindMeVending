@@ -12,14 +12,25 @@ import 'package:user_location/user_location.dart';
 import 'package:latlong/latlong.dart';
 import 'package:findmevending/organizing_classes/LocationEntry.dart';
 
-//global vars
+Map<int, Color> colorSelect = {
+  0: const Color(0xFFF69D9D),
+  1: const Color(0xFF9192FB),
+  2: const Color(0xFF5AEF93),
+  3: const Color(0xFF87DFFC)
+};
 
+//global vars
 class MapScreen extends StatefulWidget {
-  MapScreen({this.key, this.markers, this.masterList});
+  MapScreen({this.key, this.masterList, this.snacksSelected = true, this.drinksSelected = true, this.waterSelected = true, this.restroomSelected = true});
 
   PageStorageKey key;
-  List<Marker> markers;
   List<Entry> masterList;
+
+  //booleans
+  bool drinksSelected;
+  bool snacksSelected;
+  bool waterSelected;
+  bool restroomSelected;
   @override
   _MapScreenState createState() => _MapScreenState();
 }
@@ -31,17 +42,10 @@ class _MapScreenState extends State<MapScreen> {
 
   //markers
   List<Marker> markers = [];
-  List<Marker> snackMarkers = [];
-  List<Marker> drinkMarkers = [];
-  List<Marker> restRoomMarkers = [];
-  List<Marker> waterFillMarkers = [];
 
   //entry lists
   List<Entry> masterList = [];
-  List<Entry> snackList = [];
-  List<Entry> drinkList = [];
-  List<Entry> restRoomList = [];
-  List<Entry> waterFillList = [];
+  List<Entry> masterWorkingList = [];
   List<Entry> searchQueryList = [];
 
   //booleans
@@ -50,19 +54,54 @@ class _MapScreenState extends State<MapScreen> {
   bool waterSelected = true;
   bool restroomSelected = true;
 
-  void removeSnacks(){
+  void modifyMapInfo(){
+    List<Entry> newWorkingList = [];
+    for(int i = 0; i < masterList.length; i++){
+      if(snacksSelected && masterList[i].type == 0)
+        newWorkingList.add(masterList[i]);
+      if(drinksSelected && masterList[i].type == 1)
+        newWorkingList.add(masterList[i]);
+      if(restroomSelected && masterList[i].type == 2)
+        newWorkingList.add(masterList[i]);
+      if(waterSelected && masterList[i].type == 3)
+        newWorkingList.add(masterList[i]);
+    }
 
+    setState(() {
+      masterWorkingList = newWorkingList;
+      addMarkersFromList();
+    });
+  }
+
+  void addMarkersFromList(){
+    List<Marker> newMarkerList = [];
+    for(int i = 0; i < masterWorkingList.length; i++){
+      newMarkerList.add(masterWorkingList[i].marker);
+    }
+
+    setState(() {
+      markers = newMarkerList;
+    });
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    markers = widget.markers;
+
+    snacksSelected = widget.snacksSelected;
+    drinksSelected = widget.drinksSelected;
+    restroomSelected = widget.restroomSelected;
+    waterSelected = widget.waterSelected;
+
     masterList = widget.masterList;
+    masterWorkingList = widget.masterList;
+    //add every marker in the master list to the markers list
+    modifyMapInfo();
+    addMarkersFromList();
+
+    print(markers.length);
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -85,6 +124,7 @@ class _MapScreenState extends State<MapScreen> {
                   onSelected: (bool value) {
                     setState(() {
                       drinksSelected = !drinksSelected;
+                      modifyMapInfo();
                     });
                   },
                   elevation: drinksSelected ? 5 : 0,
@@ -99,6 +139,7 @@ class _MapScreenState extends State<MapScreen> {
                 onSelected: (bool value) {
                   setState(() {
                     snacksSelected = !snacksSelected;
+                    modifyMapInfo();
                   });
                 },
                 elevation: snacksSelected ? 5 : 0,
@@ -113,6 +154,7 @@ class _MapScreenState extends State<MapScreen> {
                 onSelected: (bool value) {
                   setState(() {
                     waterSelected = !waterSelected;
+                    modifyMapInfo();
                   });
                 },
                 elevation: waterSelected ? 5 : 0,
@@ -127,6 +169,7 @@ class _MapScreenState extends State<MapScreen> {
                 onSelected: (bool value) {
                   setState(() {
                     restroomSelected = !restroomSelected;
+                    modifyMapInfo();
                   });
                 },
                 elevation: restroomSelected ? 5 : 0,
@@ -156,7 +199,6 @@ class _MapScreenState extends State<MapScreen> {
                 new MarkerLayerOptions(
                   markers: markers
                 ),
-                MarkerLayerOptions(markers: markers),
                 userLocationOptions,
               ],
               mapController: mapController,
@@ -165,17 +207,17 @@ class _MapScreenState extends State<MapScreen> {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: masterList.length,
+              itemCount: masterWorkingList.length,
               shrinkWrap: true,
               itemBuilder: (BuildContext context, int index) {
                 return Column(
                   children: <Widget>[
                     ListTile(
-                      title: Text(masterList[index].buildingCode),
-                      leading: CircleAvatar(backgroundColor: colorSelect[masterList[index].type], child: Text(masterList[index].buildingCode[0], style: TextStyle(color: Colors.white, fontSize: 20,),),),
+                      title: Text(masterWorkingList[index].buildingCode),
+                      leading: CircleAvatar(backgroundColor: colorSelect[masterWorkingList[index].type], child: Text(masterWorkingList[index].buildingCode[0], style: TextStyle(color: Colors.white, fontSize: 20,),),),
                       subtitle: Column(
                         children: <Widget>[
-                          Text("TEST"),
+                          Text(masterWorkingList[index].loc),
                           Row(
                             children: <Widget>[
                               Container(
@@ -197,7 +239,9 @@ class _MapScreenState extends State<MapScreen> {
                         ],
                         crossAxisAlignment: CrossAxisAlignment.start,
                       ),
-                      onTap: (){},
+                      onTap: (){
+                        mapController.move(LatLng(masterWorkingList[index].lat, masterWorkingList[index].long), 18);
+                      },
                       trailing: Icon(CustomIcons.heart_filled),
                     ),
                     Divider(color: Colors.black54, endIndent: 15, indent: 15,)

@@ -21,7 +21,11 @@ import 'package:findmevending/organizing_classes/VendingEntry.dart';
 import 'package:findmevending/organizing_classes/UserEntry.dart';
 
 //important variables
+var myProfile = ProfileScreen(key: PageStorageKey("Page2"),);
+var myMap = MapScreen(key: PageStorageKey("Page3"), masterList: entries,);
+int selectedIndex = 0;
 const String _appTitle = "FindMeVending";
+
 
 //main material color
 Map<int, Color> mainThemeColor =
@@ -55,16 +59,6 @@ Map<int, Color> mainBackgroundColor =
 //material color to be used
 MaterialColor mainBackgroundSwatch = MaterialColor(0xFFECECEC, mainBackgroundColor);
 
-Entry testRestroom =
-new WaterFountainEntry("QAFSLyzgl45YPPWhDZQd",
-    26.305, // + N, - S
-    -98.176, // + E, - W
-    "https://firebasestorage.googleapis.com/v0/b/findmevending-seniorproject.appspot.com/o/IMG_20200323_185121555.jpg?alt=media&token=e7e6fe59-080c-48c0-8244-67eb068eb085",
-    "Outside",
-    "Along Bronc Trail, across from the ballroom",
-    [true] // fountain_refiller
-);
-
 //test data
 List<Entry> masterList = [
   Entry("000001", 0, 26.306167, -98.173148, "N/A", "Snack Vending at ACADEMICSER", ""),
@@ -86,20 +80,6 @@ List<Entry> masterList = [
 ];
 
 List<Marker> markers = [];
-List<Marker> drinkMarkers = [
-  Marker(
-    height: 100.0,
-    width: 120.0,
-    point: new LatLng(26.306167, -98.173148),
-    builder: (ctx) =>
-    new BubbleMarker(
-      bubbleColor: Colors.white,
-      bubbleContentWidgetBuilder: (BuildContext context) {
-        return const Text("Name of Marker");
-      },
-    ),
-  )
-];
 
 Map<int, Color> colorSelect = {
   0: const Color(0xFFF69D9D),
@@ -161,46 +141,27 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   //stuff for bottom nav bar
-  int _selectedIndex = 0;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     StatusBar.color(Color(0xFF98BCBF));
-
-    //for every location in the master list, create a marker to send to the map screen
-    for(int i = 0; i < masterList.length; i++){
-      markers.add(new Marker(
-        height: 100.0,
-        width: 120.0,
-        point: new LatLng(masterList[i].lat, masterList[i].long),
-        builder: (ctx) =>
-        new BubbleMarker(
-          bubbleColor: colorSelect[masterList[i].type],
-          bubbleContentWidgetBuilder: (BuildContext context) {
-            return Text(masterList[i].id);
-          },
-          widgetBuilder: (BuildContext context) {
-            return Icon(Icons.location_on,
-                color: colorSelect[masterList[i].type]);
-          }
-        ),
-      ));
-    }
   }
 
   void _onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index;
+      selectedIndex = index;
     });
   }
 
-  final List<Widget> _widgetOptions = <Widget>[
-    HomeScreen(key: PageStorageKey("Page1"),),
-    ProfileScreen(key: PageStorageKey("Page2"),),
-    MapScreen(key: PageStorageKey("Page3"), markers: markers, masterList: masterList,)
-  ];
+  void callback(int index, MapScreen newMap){
+    setState(() {
+      selectedIndex = index;
+      myMap = newMap;
+      print("wowee");
+    });
+  }
 
   final PageStorageBucket bucket = PageStorageBucket();
 
@@ -210,6 +171,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+
+    final List<Widget> _widgetOptions = <Widget>[
+      HomeScreen(key: PageStorageKey("Page1"), callback: callback,),
+      myProfile,
+      myMap
+    ];
+
     if(widget.user != null) {
       if (widget.user.uid == "0000001" || widget.user.uid == null) {
        quickRefresh();
@@ -243,7 +211,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
       body: PageStorage(
-        child: _widgetOptions[_selectedIndex],
+        child: _widgetOptions[selectedIndex],
         bucket: bucket,
 
       ),
@@ -263,7 +231,7 @@ class _MyHomePageState extends State<MyHomePage> {
             title: Text('Map'),
           ),
         ],
-        currentIndex: _selectedIndex,
+        currentIndex: selectedIndex,
         selectedItemColor: Colors.white,
         onTap: _onItemTapped,
         backgroundColor: mainColorSwatch,

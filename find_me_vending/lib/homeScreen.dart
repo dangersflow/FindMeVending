@@ -1,3 +1,4 @@
+import 'package:findmevending/mapScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:findmevending/MainCard.dart';
 import 'package:findmevending/custom_icons_icons.dart';
@@ -56,9 +57,11 @@ List<List<dynamic>> listTest2 = [
 
 
 class HomeScreen extends StatefulWidget {
-  HomeScreen({this.key});
+  HomeScreen({this.key, this.callback});
 
   PageStorageKey key;
+  Function(int, MapScreen) callback;
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -94,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       childAspectRatio: 0.8
                   ),
                   itemBuilder: (BuildContext context, int index) {
-                    return MainCard(title: list[index][0], icon: iconSelect[list[index][1]], colorGradient: gradientSelect[list[index][1]],);
+                    return MainCard(title: list[index][0], icon: iconSelect[list[index][1]], colorGradient: gradientSelect[list[index][1]], callback: widget.callback,);
                   }
               ),
               Container(

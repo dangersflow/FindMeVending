@@ -1,18 +1,22 @@
+import 'package:findmevending/mapScreen.dart';
+import 'package:findmevending/organizing_classes/LocationEntry.dart';
 import 'package:flutter/material.dart';
 import 'package:findmevending/custom_icons_icons.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:findmevending/main.dart';
 
 import 'custom_icons_icons.dart';
 
 
 //cards are cool :)
 class MainCard extends StatefulWidget {
-  MainCard({this.title, this.colorGradient, this.icon, this.type});
+  MainCard({this.title, this.colorGradient, this.icon, this.type, this.callback});
   String title;
   List<Color> colorGradient;
   Icon icon;
   bool liked = false;
   int type;
+  Function(int, MapScreen) callback;
 
   @override
   _MainCardState createState() => _MainCardState();
@@ -82,7 +86,15 @@ class _MainCardState extends State<MainCard> {
         ),
       ),
       onTap: (){
-        showDialog(context: context, builder: (BuildContext context) => AlertDialog(title: Text(widget.title + " was pressed!"),));
+        //showDialog(context: context, builder: (BuildContext context) => AlertDialog(title: Text(widget.title + " was pressed!"),));
+        if(widget.title == "Snacks")
+          widget.callback(2, MapScreen(masterList: entries, waterSelected: false, restroomSelected: false, drinksSelected: false,));
+        else if(widget.title == "Drinks")
+          widget.callback(2, MapScreen(masterList: entries, waterSelected: false, restroomSelected: false, snacksSelected: false,));
+        else if(widget.title == "Restrooms")
+          widget.callback(2, MapScreen(masterList: entries, waterSelected: false, snacksSelected: false, drinksSelected: false,));
+        else if(widget.title == "Water")
+          widget.callback(2, MapScreen(masterList: entries, restroomSelected: false, snacksSelected: false, drinksSelected: false,));
       },
     );
   }
