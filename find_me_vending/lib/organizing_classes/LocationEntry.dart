@@ -13,6 +13,13 @@ Map<int, Color> colorSelect = {
   3: const Color(0xFF87DFFC)
 };
 
+Map<int, String> typeSelect = {
+  0: "Snack Vending",
+  1: "Drink Vending",
+  2: "Restroom",
+  3: "Water Fountain",
+};
+
 class Entry {
   double lat;
   double long;

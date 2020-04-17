@@ -1,6 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:findmevending/organizing_classes/LocationEntry.dart';
 
-const List<String> restroomStatuses = <String>["Mens", "Womens", "Private Room", "Nursing Room"];
+const List<String> restroomStatuses = <String>["Mens", "Womens", "Private", "Nursing"];
+const List<Color> restroomStatusesColors = [Color(0xFF87DFFC), Color(0xFFFFE2FF), Color(0xFFF2A365), Color(0xFFBE9FE1)];
+
 
 class RestroomEntry extends Entry{
   var included = [];

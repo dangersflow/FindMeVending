@@ -11,6 +11,7 @@ import 'package:flutter_map/plugin_api.dart';
 import 'package:user_location/user_location.dart';
 import 'package:latlong/latlong.dart';
 import 'package:findmevending/organizing_classes/LocationEntry.dart';
+import 'package:findmevending/pinDetailsScreen.dart';
 
 Map<int, Color> colorSelect = {
   0: const Color(0xFFF69D9D),
@@ -241,6 +242,7 @@ class _MapScreenState extends State<MapScreen> {
                       ),
                       onTap: (){
                         mapController.move(LatLng(masterWorkingList[index].lat, masterWorkingList[index].long), 18);
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => PinDetailsScreen(masterWorkingList[index])));
                       },
                       trailing: Icon(CustomIcons.heart_filled),
                     ),

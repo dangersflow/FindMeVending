@@ -151,7 +151,7 @@ class _NewPinScreenState extends State<NewPinScreen> {
         ),
         body: Container(
           padding: EdgeInsets.all(20),
-          child: ListView(children: <Widget>[
+          child: ListView(shrinkWrap: true, children: <Widget>[
             Row(
               mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
@@ -171,6 +171,7 @@ class _NewPinScreenState extends State<NewPinScreen> {
             Align(child: Text("Type", style: TextStyle(fontSize: 32), ), alignment: Alignment.topLeft,),
             GridView.builder(
             shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
             itemCount: types.length,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
@@ -188,7 +189,7 @@ class _NewPinScreenState extends State<NewPinScreen> {
             TextField(controller: description, decoration: dec,),
             Align(child: Text("Location", style: TextStyle(fontSize: 32), ), alignment: Alignment.topLeft,),
             TextField(controller: location, decoration: dec,),
-            (_selection == 0 || _selection == 1)?Align(child: Text("Description", style: TextStyle(fontSize: 32), ), alignment: Alignment.topLeft,):Text("", style: TextStyle(fontSize: 1)),
+            (_selection == 0 || _selection == 1)?Align(child: Text("Included", style: TextStyle(fontSize: 32), ), alignment: Alignment.topLeft,):Text("", style: TextStyle(fontSize: 1)),
             (_selection == 0 || _selection == 1)?Column(children: items):Text("", style: TextStyle(fontSize: 1)),
             Column(children: statusBoxes),
             Align(alignment: Alignment.topRight, child: RaisedButton(

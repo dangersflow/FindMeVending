@@ -1,6 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:findmevending/organizing_classes/LocationEntry.dart';
 
 const List<String> fountainStatuses = <String>["Water Refiller"];
+const List<Color> fountainStatusesColors = [Color(0xFFB2DFFB)];
+
 
 class WaterFountainEntry extends Entry{
   var included = [];
