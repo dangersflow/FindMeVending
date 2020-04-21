@@ -18,20 +18,26 @@ class PinDetailsScreen extends StatefulWidget {
 }
 
 class _PinDetailsScreenState extends State<PinDetailsScreen> {
+  MapController mapController = MapController();
+  UserLocationOptions userLocationOptions;
+
   @override
   Widget build(BuildContext context) {
+    userLocationOptions = UserLocationOptions(
+      context: context,
+      mapController: mapController,
+      markers: [widget.pin.marker],
+      updateMapLocationOnPositionChange: false,
+      //since it'll be mostly used at school, this could be convenient
+      zoomToCurrentLocationOnLoad: false,
+    );
+
     AppBar appBar = AppBar(
       title: Text("Location Details", style: TextStyle(fontSize: 27, color: Colors.white)),
       iconTheme: IconThemeData(color: Colors.white),
       elevation: 0,
     );
     Container colorBlock = Container(height: appBar.preferredSize.height, color: Color.fromRGBO(152,188,191, 1),);
-//    Container colorCircle = Container(
-//        decoration: BoxDecoration(shape: BoxShape.circle, color: colorSelect[widget.pin.type]),
-//        width:(MediaQuery.of(context).size.width/4),
-//        height:(MediaQuery.of(context).size.width/4),
-//      child: Image.network(widget.pin.imageUrl),
-//    );
     CircleAvatar colorCircle = CircleAvatar(
       backgroundColor: colorSelect[widget.pin.type],
       radius:(MediaQuery.of(context).size.width/6),
@@ -40,7 +46,28 @@ class _PinDetailsScreenState extends State<PinDetailsScreen> {
     Stack stack = Stack(overflow: Overflow.visible, children: <Widget>[Align(child: colorCircle, alignment: Alignment.center), colorBlock, Positioned(top: 10, left: (MediaQuery.of(context).size.width/3), child: colorCircle,)],);
     Widget name = Align(child: Text("${typeSelect[widget.pin.type]} at ${widget.pin.buildingCode}", style: TextStyle(fontFamily: "Poppins", fontSize: 27)), alignment: Alignment.center,);
     Widget loc = Container(padding: EdgeInsets.fromLTRB(25, 5, 25, 10), child: Align(child: Text("${widget.pin.loc}", style: TextStyle(fontFamily: "Poppins", fontSize: 16, color: Colors.grey[600])), alignment: Alignment.center,));
-    Container map = Container(color: Colors.red, height: (MediaQuery.of(context).size.height/3), width: (MediaQuery.of(context).size.width));
+    Container map = Container(color: Colors.red, height: (MediaQuery.of(context).size.height/3), width: (MediaQuery.of(context).size.width),
+      child: FlutterMap(
+        options: new MapOptions(
+            center: new LatLng(widget.pin.lat, widget.pin.long),
+            zoom: 18.0,
+            plugins: [
+              UserLocationPlugin(),
+            ]
+        ),
+        layers: [
+          new TileLayerOptions(
+            urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            subdomains: ['a', 'b', 'c'],
+          ),
+          new MarkerLayerOptions(
+              markers: [widget.pin.marker]
+          ),
+          userLocationOptions,
+        ],
+        mapController: mapController,
+      ),
+    );
     Container otherInfo = Container(child: Text("", style: TextStyle(fontSize: 1),));
     Widget chips;
     if (widget.pin.type == 0 || widget.pin.type == 1) {
@@ -63,7 +90,7 @@ class _PinDetailsScreenState extends State<PinDetailsScreen> {
       List<Chip> chippies = [];
       for(int i = 0; i < vendingStatuses.length; i++) {
         if (pinSubV.status[i] == null || pinSubV.status[i] == false) {
-          chippies.add(Chip(label: Text("${vendingStatuses[i]}", style: TextStyle(fontFamily: "Poppins", fontSize: 16)), backgroundColor: Colors.grey[400],));
+          chippies.add(Chip(label: Text("${vendingStatuses[i]}", style: TextStyle(fontFamily: "Poppins", fontSize: 16, color: Colors.grey[700])), backgroundColor: Colors.grey[400],));
         }
         else {
           chippies.add(Chip(label: Text("${vendingStatuses[i]}", style: TextStyle(fontFamily: "Poppins", fontSize: 16)), backgroundColor: vendingStatusesColors[i],));
@@ -78,7 +105,7 @@ class _PinDetailsScreenState extends State<PinDetailsScreen> {
       List<Chip> chippies = [];
       for(int i = 0; i < restroomStatuses.length; i++) {
         if (pinSubR.included[i] == null || pinSubR.included[i] == false) {
-          chippies.add(Chip(label: Text("${restroomStatuses[i]}", style: TextStyle(fontFamily: "Poppins", fontSize: 16)), backgroundColor: Colors.grey[400],));
+          chippies.add(Chip(label: Text("${restroomStatuses[i]}", style: TextStyle(fontFamily: "Poppins", fontSize: 16, color: Colors.grey[700])), backgroundColor: Colors.grey[400],));
         }
         else {
           chippies.add(Chip(label: Text("${restroomStatuses[i]}", style: TextStyle(fontFamily: "Poppins", fontSize: 16)), backgroundColor: restroomStatusesColors[i],));
@@ -92,7 +119,7 @@ class _PinDetailsScreenState extends State<PinDetailsScreen> {
       List<Chip> chippies = [];
       for(int i = 0; i < fountainStatuses.length; i++) {
         if (pinSubW.included[i] == null || pinSubW.included[i] == false) {
-          chippies.add(Chip(label: Text("${fountainStatuses[i]}", style: TextStyle(fontFamily: "Poppins", fontSize: 16)), backgroundColor: Colors.grey[400]));
+          chippies.add(Chip(label: Text("${fountainStatuses[i]}", style: TextStyle(fontFamily: "Poppins", fontSize: 16, color: Colors.grey[700])), backgroundColor: Colors.grey[400]));
         }
         else {
           chippies.add(Chip(label: Text("${fountainStatuses[i]}", style: TextStyle(fontFamily: "Poppins", fontSize: 16)), backgroundColor: fountainStatusesColors[i],));

@@ -7,6 +7,7 @@ import 'package:latlong/latlong.dart';
 import 'package:findmevending/organizing_classes/VendingEntry.dart';
 import 'package:findmevending/organizing_classes/FountainEntry.dart';
 import 'package:findmevending/organizing_classes/RestroomEntry.dart';
+import 'package:findmevending/organizing_classes/LocationEntry.dart';
 
 List<String> types = <String>["Food Vending", "Drink Vending", "Restroom", "Water Fountain"];
 Color textFieldColor = Colors.grey[350];
@@ -27,6 +28,10 @@ class _NewPinScreenState extends State<NewPinScreen> {
   bool initiate = false;
   List<Widget> statusBoxes = [];
   List<bool> statuses = [];
+  MapController mapController = MapController();
+  UserLocationOptions userLocationOptions;
+
+  Marker locSelected;
 
   void initState() {
     itemsControllers[itemsControllers.length-1].addListener(() {
@@ -50,6 +55,23 @@ class _NewPinScreenState extends State<NewPinScreen> {
     generateStatuses(newSelection: true);
 
     setState(() {});
+  }
+
+  void updateLocationSelected(LatLng point) {
+    locSelected = new Marker(height: 100, width: 120, point: point,
+      builder: (ctx) =>
+      new BubbleMarker(
+      bubbleColor: colorSelect[_selection],
+      bubbleContentWidgetBuilder: (BuildContext context) {
+      return Text(location.text);
+      },
+      widgetBuilder: (BuildContext context) {
+      return Icon(Icons.location_on,
+      color: colorSelect[_selection]);
+      }
+      ),
+    );
+    super.setState((){});
   }
 
   void generateStatuses({bool newSelection = false}) {
@@ -137,7 +159,30 @@ class _NewPinScreenState extends State<NewPinScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    userLocationOptions = UserLocationOptions(
+      context: context,
+      mapController: mapController,
+      markers: [],
+      updateMapLocationOnPositionChange: false,
+      //since it'll be mostly used at school, this could be convenient
+      zoomToCurrentLocationOnLoad: false,
+    );
+
     if (!initiate) {
+      locSelected = new Marker(height: 100, width: 120, point: LatLng(0, 0),
+        builder: (ctx) =>
+        new BubbleMarker(
+            bubbleColor: colorSelect[_selection],
+            bubbleContentWidgetBuilder: (BuildContext context) {
+              return Text(location.text);
+            },
+            widgetBuilder: (BuildContext context) {
+              return Icon(Icons.location_on,
+                  color: colorSelect[_selection]);
+            }
+        ),
+      );
       generateItemFields();
       super.setState((){});
       initiate = true;
@@ -158,13 +203,34 @@ class _NewPinScreenState extends State<NewPinScreen> {
                   Container(
                     color: Colors.red,
                     width: (MediaQuery.of(context).size.width/2)-(MediaQuery.of(context).size.width/12),
-                    height: (MediaQuery.of(context).size.height/3)-(MediaQuery.of(context).size.height/10),
+                    height: (MediaQuery.of(context).size.height/3),
+                    child: FlutterMap(
+                      options: new MapOptions(
+                        center: new LatLng(26.306167, -98.173148),
+                        zoom: 16.0,
+                        plugins: [
+                          UserLocationPlugin(),
+                        ],
+                        onTap: updateLocationSelected,
+                      ),
+                      layers: [
+                        new TileLayerOptions(
+                          urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                          subdomains: ['a', 'b', 'c'],
+                        ),
+                        new MarkerLayerOptions(
+                          markers: [locSelected],
+                        ),
+                        userLocationOptions,
+                      ],
+                      mapController: mapController,
+                    ),
                   ),
                   Spacer(),
                   Container(
                     color: Colors.blue,
                     width: (MediaQuery.of(context).size.width/2)-(MediaQuery.of(context).size.width/12),
-                    height: (MediaQuery.of(context).size.height/3)-(MediaQuery.of(context).size.height/10),
+                    height: (MediaQuery.of(context).size.height/3),
                   ),
                 ]
             ),
