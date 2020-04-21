@@ -8,6 +8,7 @@ import 'package:findmevending/organizing_classes/VendingEntry.dart';
 import 'package:findmevending/organizing_classes/FountainEntry.dart';
 import 'package:findmevending/organizing_classes/RestroomEntry.dart';
 import 'package:findmevending/organizing_classes/LocationEntry.dart';
+import 'package:image_picker/image_picker.dart';
 
 List<String> types = <String>["Food Vending", "Drink Vending", "Restroom", "Water Fountain"];
 Color textFieldColor = Colors.grey[350];
@@ -32,6 +33,7 @@ class _NewPinScreenState extends State<NewPinScreen> {
   UserLocationOptions userLocationOptions;
 
   Marker locSelected;
+  var _image;
 
   void initState() {
     itemsControllers[itemsControllers.length-1].addListener(() {
@@ -143,7 +145,7 @@ class _NewPinScreenState extends State<NewPinScreen> {
       else {
         button = IconButton(icon: Icon(Icons.clear), onPressed: () { generateItemFields(remove: i); });
       }
-      items.add(TextField(controller: itemsControllers[i], decoration: InputDecoration(filled: true, fillColor: textFieldColor, border: OutlineInputBorder(), suffixIcon: button),));
+      items.add(TextField(controller: itemsControllers[i], style: TextStyle(fontFamily: 'Poppins'), decoration: InputDecoration(filled: true, fillColor: textFieldColor, border: OutlineInputBorder(), suffixIcon: button),));
     }
 
     itemsControllers[itemsControllers.length-1].addListener(() {
@@ -155,6 +157,14 @@ class _NewPinScreenState extends State<NewPinScreen> {
     });
 
     super.setState((){});
+  }
+
+  Future getImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.camera);
+
+    setState((){
+      _image = image;
+    });
   }
 
   @override
@@ -227,11 +237,14 @@ class _NewPinScreenState extends State<NewPinScreen> {
                     ),
                   ),
                   Spacer(),
-                  Container(
-                    color: Colors.blue,
-                    width: (MediaQuery.of(context).size.width/2)-(MediaQuery.of(context).size.width/12),
-                    height: (MediaQuery.of(context).size.height/3),
-                  ),
+                  InkWell(child: Container(
+                      color: Colors.blue,
+                      width: (MediaQuery.of(context).size.width/2)-(MediaQuery.of(context).size.width/12),
+                      height: (MediaQuery.of(context).size.height/3),
+                      child: _image == null?Center(child: Text("Tap me to \ntake a photo!", style: TextStyle(fontFamily: "Poppins", fontSize: 16, color: Colors.white))):Image.file(_image),
+                    ),
+                    onTap: ((){getImage();})
+                  )
                 ]
             ),
             Align(child: Text("Type", style: TextStyle(fontSize: 32), ), alignment: Alignment.topLeft,),
@@ -252,9 +265,9 @@ class _NewPinScreenState extends State<NewPinScreen> {
               ));
             }),
             Align(child: Text("Description", style: TextStyle(fontSize: 32), ), alignment: Alignment.topLeft,),
-            TextField(controller: description, decoration: dec,),
+            TextField(controller: description, style: TextStyle(fontFamily: 'Poppins'), decoration: dec,),
             Align(child: Text("Location", style: TextStyle(fontSize: 32), ), alignment: Alignment.topLeft,),
-            TextField(controller: location, decoration: dec,),
+            TextField(controller: location, style: TextStyle(fontFamily: 'Poppins'), decoration: dec,),
             (_selection == 0 || _selection == 1)?Align(child: Text("Included", style: TextStyle(fontSize: 32), ), alignment: Alignment.topLeft,):Text("", style: TextStyle(fontSize: 1)),
             (_selection == 0 || _selection == 1)?Column(children: items):Text("", style: TextStyle(fontSize: 1)),
             Column(children: statusBoxes),
