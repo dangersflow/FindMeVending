@@ -1,6 +1,5 @@
 import 'package:findmevending/organizing_classes/LocationEntry.dart';
 import 'package:flutter/material.dart';
-import 'package:map_markers/map_markers.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:user_location/user_location.dart';
@@ -41,7 +40,7 @@ class _PinDetailsScreenState extends State<PinDetailsScreen> {
     CircleAvatar colorCircle = CircleAvatar(
       backgroundColor: colorSelect[widget.pin.type],
       radius:(MediaQuery.of(context).size.width/6),
-      backgroundImage: NetworkImage(widget.pin.imageUrl),
+      backgroundImage: widget.pin.image is String?NetworkImage(widget.pin.image):FileImage(widget.pin.image),
     );
     Stack stack = Stack(overflow: Overflow.visible, children: <Widget>[Align(child: colorCircle, alignment: Alignment.center), colorBlock, Positioned(top: 10, left: (MediaQuery.of(context).size.width/3), child: colorCircle,)],);
     Widget name = Align(child: Text("${typeSelect[widget.pin.type]} at ${widget.pin.buildingCode}", style: TextStyle(fontFamily: "Poppins", fontSize: 27)), alignment: Alignment.center,);

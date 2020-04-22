@@ -8,8 +8,8 @@ const List<Color> restroomStatusesColors = [Color(0xFF87DFFC), Color(0xFFFFE2FF)
 class RestroomEntry extends Entry{
   var included = [];
 
-  RestroomEntry(String id, double lat, double long, String imageUrl, String buildingCode, String loc, this.included) :
-        super(id, 2, lat, long, imageUrl, buildingCode, loc);
+  RestroomEntry(String id, double lat, double long, var image, String buildingCode, String loc, this.included) :
+        super(id, 2, lat, long, image, buildingCode, loc);
 }
 
 RestroomEntry testRestroom =

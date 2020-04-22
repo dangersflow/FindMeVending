@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:map_markers/map_markers.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:user_location/user_location.dart';
 import 'package:latlong/latlong.dart';
 import 'package:findmevending/organizing_classes/VendingEntry.dart';
+import 'package:findmevending/organizing_classes/ItemEntry.dart';
 import 'package:findmevending/organizing_classes/FountainEntry.dart';
 import 'package:findmevending/organizing_classes/RestroomEntry.dart';
 import 'package:findmevending/organizing_classes/LocationEntry.dart';
@@ -21,10 +23,10 @@ class NewPinScreen extends StatefulWidget {
 
 class _NewPinScreenState extends State<NewPinScreen> {
   int _selection = 0;
-  TextEditingController description = TextEditingController();
+  TextEditingController buildingCode = TextEditingController();
   List<TextEditingController> itemsControllers = [TextEditingController()];
   List<Widget> items = <Widget>[TextField()];
-  TextEditingController location = TextEditingController();
+  TextEditingController locationInstructions = TextEditingController();
   int lastLength = 0;
   bool initiate = false;
   List<Widget> statusBoxes = [];
@@ -33,7 +35,30 @@ class _NewPinScreenState extends State<NewPinScreen> {
   UserLocationOptions userLocationOptions;
 
   Marker locSelected;
+  LatLng point;
   var _image;
+
+  void submit() {
+    Entry entry;
+    if(_selection == 0 || _selection == 1) {
+      while(itemsControllers[itemsControllers.length-1].text.length == 0) {
+        itemsControllers.removeAt(itemsControllers.length-1);
+      }
+      List<Item> items = [];
+      for(int i = 0; i < itemsControllers.length; i++) {
+        items.add(Item("", itemsControllers[i].text, false));
+      }
+      entry = VendingEntry("", _selection, point.latitude, point.longitude, _image, this.buildingCode.text, this.locationInstructions.text, items, statuses);
+    }
+    else if(_selection == 2) {
+      entry = RestroomEntry("", point.latitude, point.longitude, _image, this.buildingCode.text, this.locationInstructions.text, statuses);
+    }
+    else {
+      entry = WaterFountainEntry("", point.latitude, point.longitude, _image, this.buildingCode.text, this.locationInstructions.text, statuses);
+    }
+
+    masterlistEntries.add(entry);
+  }
 
   void initState() {
     itemsControllers[itemsControllers.length-1].addListener(() {
@@ -43,6 +68,7 @@ class _NewPinScreenState extends State<NewPinScreen> {
 
       lastLength = itemsControllers[itemsControllers.length-1].text.length;
     });
+    super.initState();
   }
 
   void changeSelection(int value) {
@@ -60,12 +86,13 @@ class _NewPinScreenState extends State<NewPinScreen> {
   }
 
   void updateLocationSelected(LatLng point) {
+    this.point = point;
     locSelected = new Marker(height: 100, width: 120, point: point,
       builder: (ctx) =>
       new BubbleMarker(
       bubbleColor: colorSelect[_selection],
       bubbleContentWidgetBuilder: (BuildContext context) {
-      return Text(location.text);
+      return Text(locationInstructions.text);
       },
       widgetBuilder: (BuildContext context) {
       return Icon(Icons.location_on,
@@ -185,7 +212,7 @@ class _NewPinScreenState extends State<NewPinScreen> {
         new BubbleMarker(
             bubbleColor: colorSelect[_selection],
             bubbleContentWidgetBuilder: (BuildContext context) {
-              return Text(location.text);
+              return Text(locationInstructions.text);
             },
             widgetBuilder: (BuildContext context) {
               return Icon(Icons.location_on,
@@ -264,17 +291,19 @@ class _NewPinScreenState extends State<NewPinScreen> {
               ]
               ));
             }),
-            Align(child: Text("Description", style: TextStyle(fontSize: 32), ), alignment: Alignment.topLeft,),
-            TextField(controller: description, style: TextStyle(fontFamily: 'Poppins'), decoration: dec,),
-            Align(child: Text("Location", style: TextStyle(fontSize: 32), ), alignment: Alignment.topLeft,),
-            TextField(controller: location, style: TextStyle(fontFamily: 'Poppins'), decoration: dec,),
+            Align(child: Text("Building Code", style: TextStyle(fontSize: 32), ), alignment: Alignment.topLeft,),
+            TextField(controller: buildingCode, style: TextStyle(fontFamily: 'Poppins'), decoration: dec,),
+            Align(child: Text("Location Instructions", style: TextStyle(fontSize: 32), ), alignment: Alignment.topLeft,),
+            Align(child: Text("More Specific Instructions of how to get there.", style: TextStyle(fontSize: 14, fontFamily: 'Poppins'), ), alignment: Alignment.topLeft,),
+            Align(child: Text("Example: At the end of the last hallway to the right while walking toward the library.", style: TextStyle(fontSize: 14, fontFamily: 'Poppins'), ), alignment: Alignment.topLeft,),
+            TextField(controller: locationInstructions, style: TextStyle(fontFamily: 'Poppins'), decoration: dec,),
             (_selection == 0 || _selection == 1)?Align(child: Text("Included", style: TextStyle(fontSize: 32), ), alignment: Alignment.topLeft,):Text("", style: TextStyle(fontSize: 1)),
             (_selection == 0 || _selection == 1)?Column(children: items):Text("", style: TextStyle(fontSize: 1)),
             Column(children: statusBoxes),
             Align(alignment: Alignment.topRight, child: RaisedButton(
               child: Text("SUBMIT", style: TextStyle(fontFamily: 'Poppins', color: Colors.white, fontSize: 18)),
             color: Color(0xFF98BCBF),
-            onPressed: (){}
+            onPressed: ((){submit(); Navigator.pop(context);})
             ))
     ]),
     ));

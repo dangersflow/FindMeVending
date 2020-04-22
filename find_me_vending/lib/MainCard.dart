@@ -88,13 +88,13 @@ class _MainCardState extends State<MainCard> {
       onTap: (){
         //showDialog(context: context, builder: (BuildContext context) => AlertDialog(title: Text(widget.title + " was pressed!"),));
         if(widget.title == "Snacks")
-          widget.callback(2, MapScreen(masterList: entries, waterSelected: false, restroomSelected: false, drinksSelected: false,));
+          widget.callback(2, MapScreen(masterList: masterlistEntries, waterSelected: false, restroomSelected: false, drinksSelected: false,));
         else if(widget.title == "Drinks")
-          widget.callback(2, MapScreen(masterList: entries, waterSelected: false, restroomSelected: false, snacksSelected: false,));
+          widget.callback(2, MapScreen(masterList: masterlistEntries, waterSelected: false, restroomSelected: false, snacksSelected: false,));
         else if(widget.title == "Restrooms")
-          widget.callback(2, MapScreen(masterList: entries, waterSelected: false, snacksSelected: false, drinksSelected: false,));
+          widget.callback(2, MapScreen(masterList: masterlistEntries, waterSelected: false, snacksSelected: false, drinksSelected: false,));
         else if(widget.title == "Water")
-          widget.callback(2, MapScreen(masterList: entries, restroomSelected: false, snacksSelected: false, drinksSelected: false,));
+          widget.callback(2, MapScreen(masterList: masterlistEntries, restroomSelected: false, snacksSelected: false, drinksSelected: false,));
       },
     );
   }

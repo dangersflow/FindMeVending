@@ -9,7 +9,7 @@ class VendingEntry extends Entry{
   List<Item> included = [];
   List<bool> status = [];
   
-  VendingEntry(String id, int type, double lat, double long, String imageUrl, String buildingCode, String loc, this.included, this.status) : super(id, type, lat, long, imageUrl, buildingCode, loc);
+  VendingEntry(String id, int type, double lat, double long, var image, String buildingCode, String loc, this.included, this.status) : super(id, type, lat, long, image, buildingCode, loc);
 }
 
 List<Item> items = [

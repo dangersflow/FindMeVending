@@ -24,13 +24,13 @@ class Entry {
   double lat;
   double long;
   int type; // 0 = food vending, 1 = drink vending, 2 = restroom, 3 = water fountain
-  String imageUrl;
+  var image;
   String buildingCode;
   String loc;
   String id;
   Marker marker;
 
-  Entry(this.id, this.type, this.lat, this.long, this.imageUrl, this.buildingCode, this.loc){
+  Entry(this.id, this.type, this.lat, this.long, this.image, this.buildingCode, this.loc){
     marker = new Marker(
       height: 100.0,
       width: 120.0,
@@ -50,4 +50,4 @@ class Entry {
   }
 }
 
-List<Entry> entries = <Entry>[testVending, testFountain, testRestroom];
+List<Entry> masterlistEntries = <Entry>[testVending, testFountain, testRestroom];

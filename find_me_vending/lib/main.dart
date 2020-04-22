@@ -22,7 +22,7 @@ import 'package:findmevending/organizing_classes/UserEntry.dart';
 
 //important variables
 var myProfile = ProfileScreen(key: PageStorageKey("Page2"),);
-var myMap = MapScreen(key: PageStorageKey("Page3"), masterList: entries,);
+var myMap = MapScreen(key: PageStorageKey("Page3"), masterList: masterlistEntries,);
 int selectedIndex = 0;
 const String _appTitle = "FindMeVending";
 

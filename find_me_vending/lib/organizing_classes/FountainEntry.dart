@@ -8,8 +8,8 @@ const List<Color> fountainStatusesColors = [Color(0xFFB2DFFB)];
 class WaterFountainEntry extends Entry{
   var included = [];
 
-  WaterFountainEntry(String id, double lat, double long, String imageUrl, String buildingCode, String loc, this.included) :
-    super(id, 3, lat, long, imageUrl, buildingCode, loc);
+  WaterFountainEntry(String id, double lat, double long, var image, String buildingCode, String loc, this.included) :
+    super(id, 3, lat, long, image, buildingCode, loc);
 }
 
 WaterFountainEntry testFountain =
