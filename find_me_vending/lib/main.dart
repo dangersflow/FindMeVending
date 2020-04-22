@@ -1,31 +1,22 @@
 import 'package:findmevending/NewPinScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:findmevending/custom_icons_icons.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:findmevending/loginSignUp.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:findmevending/homeScreen.dart';
 import 'package:findmevending/profileScreen.dart';
 import 'package:findmevending/mapScreen.dart';
 import 'package:statusbar/statusbar.dart';
-import 'package:user_location/user_location.dart';
-import 'package:latlong/latlong.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:findmevending/organizing_classes/UserEntry.dart';
-import 'package:map_markers/map_markers.dart';
 import 'package:findmevending/organizing_classes/LocationEntry.dart';
-import 'package:findmevending/organizing_classes/FountainEntry.dart';
-import 'package:findmevending/organizing_classes/RestroomEntry.dart';
-import 'package:findmevending/organizing_classes/VendingEntry.dart';
-import 'package:findmevending/organizing_classes/UserEntry.dart';
 
 //important variables
 var myProfile = ProfileScreen(key: PageStorageKey("Page2"),);
 var myMap = MapScreen(key: PageStorageKey("Page3"), masterList: masterlistEntries,);
 int selectedIndex = 0;
 const String _appTitle = "FindMeVending";
-
 
 //main material color
 Map<int, Color> mainThemeColor =
@@ -59,26 +50,6 @@ Map<int, Color> mainBackgroundColor =
 //material color to be used
 MaterialColor mainBackgroundSwatch = MaterialColor(0xFFECECEC, mainBackgroundColor);
 
-//test data
-List<Entry> masterList = [
-  Entry("000001", 0, 26.306167, -98.173148, "N/A", "Snack Vending at ACADEMICSER", ""),
-  Entry("000002", 0, 26.306587, -98.173738, "N/A", "Snack Vending at UNIVLIB", ""),
-  Entry("000003", 0, 26.307366, -98.176488, "N/A", "Snack Vending at ELABN 1.104", ""),
-  Entry("000004", 0, 26.306722, -98.175308, "N/A", "Snack Vending at EIEAB 1.203", ""),
-  Entry("000005", 1, 26.306934, -98.173602, "N/A", "Drink Vending at UNIVLIB", ""),
-  Entry("000006", 1, 26.306184, -98.176220, "N/A", "Drink Vending at ELABS 1.102", ""),
-  Entry("000007", 1, 26.306492, -98.172197, "N/A", "Drink Vending at SCIENCEBUIL", ""),
-  Entry("000008", 1, 26.307348, -98.175276, "N/A", "Drink Vending at EHABW 1.109", ""),
-  Entry("000009", 2, 26.304761, -98.174267, "N/A", "Restroom at STUDENTSERV", ""),
-  Entry("000010", 2, 26.305377, -98.175276, "N/A", "Restroom at STUDENTSERVSTUDENTUNIO", ""),
-  Entry("000011", 2, 26.306675, -98.174203, "N/A", "Restroom at STUDENTSERVUNIVLIB", ""),
-  Entry("000012", 2, 26.307762, -98.171789, "N/A", "Restroom at STUDENTSERVEDUCOMPLEX", ""),
-  Entry("000013", 3, 26.305771, -98.171660, "N/A", "Water Bottle Filler at EENGR 1.106", ""),
-  Entry("000014", 3, 26.306925, -98.170212, "N/A", "Water Bottle Filler at EFIELDHOUSE", ""),
-  Entry("000015", 3, 26.309214, -98.175051, "N/A", "Water Bottle Filler at HEALTHCENTE", ""),
-  Entry("000016", 3, 26.307685, -98.178001, "N/A", "Water Bottle Filler at UNITYHALL", ""),
-];
-
 List<Marker> markers = [];
 
 Map<int, Color> colorSelect = {
@@ -87,6 +58,8 @@ Map<int, Color> colorSelect = {
   2: const Color(0xFF5AEF93),
   3: const Color(0xFF87DFFC)
 };
+
+bool isSearching = false;
 
 void main() => runApp(MyApp());
 
@@ -151,6 +124,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _onItemTapped(int index) {
     setState(() {
+      //resets map when you leave it
+      myMap = MapScreen(key: PageStorageKey("Page3"), masterList: masterlistEntries,);
       selectedIndex = index;
     });
   }
@@ -190,7 +165,20 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
+      appBar: isSearching ? AppBar(
+        title: TextField(
+          autofocus: true,
+          style: TextStyle(fontSize: 27),
+          onSubmitted: (String str){
+            setState(() {
+              isSearching = false;
+            });
+            //it doesn't update when in the map screen (not too sure how fix)
+            callback(2, MapScreen(key: PageStorageKey("Page3"), masterList: masterlistEntries, searchQuery: str,));
+          },
+        )
+      )
+          : AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title, style: TextStyle(fontSize: 27),),
@@ -205,7 +193,7 @@ class _MyHomePageState extends State<MyHomePage> {
             padding: EdgeInsets.fromLTRB(0, 7, 20, 0),
           ),
           Container(
-            child: Icon(Icons.search, size: 27,),
+            child: IconButton(icon: Icon(Icons.search, size: 27,), onPressed: (){setState(() {isSearching = true;});},),
             padding: EdgeInsets.fromLTRB(0, 7, 20, 0),
           )
         ],

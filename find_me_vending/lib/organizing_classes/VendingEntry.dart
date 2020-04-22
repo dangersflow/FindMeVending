@@ -10,6 +10,16 @@ class VendingEntry extends Entry{
   List<bool> status = [];
   
   VendingEntry(String id, int type, double lat, double long, var image, String buildingCode, String loc, this.included, this.status) : super(id, type, lat, long, image, buildingCode, loc);
+
+  dynamic toStr(){
+    String str = "";
+    for(int i = 0; i < included.length; i++){
+      str += included[i].name;
+    }
+    str = str.replaceAll(RegExp(' '), '');
+    str = str.toLowerCase();
+    return str;
+  }
 }
 
 List<Item> items = [
