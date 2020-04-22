@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:map_markers/map_markers.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map/plugin_api.dart';
@@ -11,6 +10,8 @@ import 'package:findmevending/organizing_classes/FountainEntry.dart';
 import 'package:findmevending/organizing_classes/RestroomEntry.dart';
 import 'package:findmevending/organizing_classes/LocationEntry.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:path/path.dart' as Path;
 
 List<String> types = <String>["Food Vending", "Drink Vending", "Restroom", "Water Fountain"];
 Color textFieldColor = Colors.grey[350];
@@ -37,6 +38,7 @@ class _NewPinScreenState extends State<NewPinScreen> {
   Marker locSelected;
   LatLng point;
   var _image;
+  String _imageURL;
 
   void submit() {
     Entry entry;
@@ -58,6 +60,21 @@ class _NewPinScreenState extends State<NewPinScreen> {
     }
 
     masterlistEntries.add(entry);
+    uploadFile();
+  }
+
+  Future uploadFile() async {
+    print("FileName: ${Path.basename(_image.path)}");
+    StorageReference storageReference = FirebaseStorage.instance.ref().child('${Path.basename(_image.path)}');
+    StorageUploadTask uploadTask = storageReference.putFile(_image);
+    await uploadTask.onComplete;
+    print("Upload Completed!");
+    storageReference.getDownloadURL().then((fileURL) {
+      setState(() {
+        _imageURL = fileURL;
+        print(_imageURL);
+      });
+    });
   }
 
   void initState() {
@@ -188,6 +205,8 @@ class _NewPinScreenState extends State<NewPinScreen> {
 
   Future getImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.camera);
+    String dateTime = DateTime.now().toString().replaceAll(":", "_").replaceAll("-", "_").replaceAll(".", "_");
+    image = await image.rename(Path.dirname(image.path)+dateTime+".jpg");
 
     setState((){
       _image = image;

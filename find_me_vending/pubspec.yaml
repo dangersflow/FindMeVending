@@ -32,6 +32,7 @@ dependencies:
   latlong: any
   statusbar: any
   image_picker: any
+  firebase_storage: any
 
 dev_dependencies:
   flutter_test:
