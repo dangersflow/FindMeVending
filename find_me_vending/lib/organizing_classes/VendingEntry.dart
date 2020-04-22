@@ -16,8 +16,9 @@ class VendingEntry extends Entry{
     for(int i = 0; i < included.length; i++){
       str += included[i].name;
     }
-    str = str.replaceAll(RegExp(' '), '');
+    str = str.replaceAll(RegExp(r"([^\w])"), '');
     str = str.toLowerCase();
+
     return str;
   }
 }
