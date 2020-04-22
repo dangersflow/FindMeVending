@@ -88,6 +88,8 @@ Map<int, Color> colorSelect = {
   3: const Color(0xFF87DFFC)
 };
 
+bool isSearching = false;
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -151,6 +153,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _onItemTapped(int index) {
     setState(() {
+      //resets map when you leave it
+      myMap = MapScreen(key: PageStorageKey("Page3"), masterList: entries,);
       selectedIndex = index;
     });
   }
@@ -190,7 +194,20 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
+      appBar: isSearching ? AppBar(
+        title: TextField(
+          autofocus: true,
+          style: TextStyle(fontSize: 27),
+          onSubmitted: (String str){
+            setState(() {
+              isSearching = false;
+            });
+            //it doesn't update when in the map screen (not too sure how fix)
+            callback(2, MapScreen(key: PageStorageKey("Page3"), masterList: entries, searchQuery: str,));
+          },
+        )
+      )
+          : AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title, style: TextStyle(fontSize: 27),),
@@ -205,7 +222,7 @@ class _MyHomePageState extends State<MyHomePage> {
             padding: EdgeInsets.fromLTRB(0, 7, 20, 0),
           ),
           Container(
-            child: Icon(Icons.search, size: 27,),
+            child: IconButton(icon: Icon(Icons.search, size: 27,), onPressed: (){setState(() {isSearching = true;});},),
             padding: EdgeInsets.fromLTRB(0, 7, 20, 0),
           )
         ],

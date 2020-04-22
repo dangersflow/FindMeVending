@@ -36,18 +36,25 @@ class Entry {
       width: 120.0,
       point: new LatLng(lat, long),
       builder: (ctx) =>
-      new BubbleMarker(
-          bubbleColor: colorSelect[type],
-          bubbleContentWidgetBuilder: (BuildContext context) {
-            return Text(buildingCode);
-          },
-          widgetBuilder: (BuildContext context) {
-            return Icon(Icons.location_on,
-                color: colorSelect[type]);
-          }
-      ),
+          Icon(Icons.location_on,
+              color: colorSelect[type])
     );
+  }
+
+  dynamic toStr(){
+    return false;
   }
 }
 
+/*new BubbleMarker(
+bubbleColor: colorSelect[type],
+bubbleContentWidgetBuilder: (BuildContext context) {
+return Text(buildingCode);
+},
+widgetBuilder: (BuildContext context) {
+return Icon(Icons.location_on,
+color: colorSelect[type]);
+}
+),
+*/
 List<Entry> entries = <Entry>[testVending, testFountain, testRestroom];

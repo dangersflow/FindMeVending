@@ -20,9 +20,16 @@ Map<int, Color> colorSelect = {
   3: const Color(0xFF87DFFC)
 };
 
+Map<int, Color> darkColorSelect = {
+  0: const Color(0xFFc16e6f),
+  1: const Color(0xFF5e64c7),
+  2: const Color(0xFF00bb64),
+  3: const Color(0xFF52adc9)
+};
+
 //global vars
 class MapScreen extends StatefulWidget {
-  MapScreen({this.key, this.masterList, this.snacksSelected = true, this.drinksSelected = true, this.waterSelected = true, this.restroomSelected = true});
+  MapScreen({this.key, this.masterList, this.snacksSelected = true, this.drinksSelected = true, this.waterSelected = true, this.restroomSelected = true, this.searchQuery = ""});
 
   PageStorageKey key;
   List<Entry> masterList;
@@ -32,11 +39,14 @@ class MapScreen extends StatefulWidget {
   bool snacksSelected;
   bool waterSelected;
   bool restroomSelected;
+  String searchQuery;
   @override
   _MapScreenState createState() => _MapScreenState();
 }
 
 class _MapScreenState extends State<MapScreen> {
+  //searchQuery
+  String searchQuery;
   //things needed for user location
   MapController mapController = MapController();
   UserLocationOptions userLocationOptions;
@@ -55,17 +65,28 @@ class _MapScreenState extends State<MapScreen> {
   bool waterSelected = true;
   bool restroomSelected = true;
 
-  void modifyMapInfo(){
+  void modifyMapInfo({String searchQuery = ""}){
     List<Entry> newWorkingList = [];
     for(int i = 0; i < masterList.length; i++){
-      if(snacksSelected && masterList[i].type == 0)
-        newWorkingList.add(masterList[i]);
-      if(drinksSelected && masterList[i].type == 1)
-        newWorkingList.add(masterList[i]);
-      if(restroomSelected && masterList[i].type == 2)
-        newWorkingList.add(masterList[i]);
-      if(waterSelected && masterList[i].type == 3)
-        newWorkingList.add(masterList[i]);
+      if(searchQuery == ""){
+        if(snacksSelected && masterList[i].type == 0)
+          newWorkingList.add(masterList[i]);
+        if(drinksSelected && masterList[i].type == 1)
+          newWorkingList.add(masterList[i]);
+        if(restroomSelected && masterList[i].type == 2)
+          newWorkingList.add(masterList[i]);
+        if(waterSelected && masterList[i].type == 3)
+          newWorkingList.add(masterList[i]);
+      }
+      else{
+        if(masterList[i].toStr() is String){
+          String items = masterList[i].toStr();
+          if(items.contains(RegExp(searchQuery))){
+            print("Found item!");
+            newWorkingList.add(masterList[i]);
+          }
+        }
+      }
     }
 
     setState(() {
@@ -89,7 +110,7 @@ class _MapScreenState extends State<MapScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
+    searchQuery = widget.searchQuery;
     snacksSelected = widget.snacksSelected;
     drinksSelected = widget.drinksSelected;
     restroomSelected = widget.restroomSelected;
@@ -98,7 +119,7 @@ class _MapScreenState extends State<MapScreen> {
     masterList = widget.masterList;
     masterWorkingList = widget.masterList;
     //add every marker in the master list to the markers list
-    modifyMapInfo();
+    modifyMapInfo(searchQuery: searchQuery);
     addMarkersFromList();
 
     print(markers.length);
@@ -130,10 +151,10 @@ class _MapScreenState extends State<MapScreen> {
                   },
                   elevation: drinksSelected ? 5 : 0,
                   selected: drinksSelected,
-                  selectedColor: Color(0xFFFFBB97),
+                  selectedColor: colorSelect[1],
+                  disabledColor: Colors.black54,
                   labelStyle: TextStyle(color: Colors.black, fontFamily: "Poppins"),
-                  backgroundColor: Colors.transparent,
-                  shape: StadiumBorder(side: BorderSide(color: drinksSelected ? Color(0xFFF57C00) : Colors.grey)),
+                  shape: StadiumBorder(side: BorderSide(color: drinksSelected ? darkColorSelect[1] : Colors.grey)),
               ),
               ChoiceChip(
                 label: Text("Snacks"),
@@ -145,10 +166,10 @@ class _MapScreenState extends State<MapScreen> {
                 },
                 elevation: snacksSelected ? 5 : 0,
                 selected: snacksSelected,
-                selectedColor: Color(0xFFFFBB97),
+                selectedColor: colorSelect[0],
+                disabledColor: Colors.black54,
                 labelStyle: TextStyle(color: Colors.black, fontFamily: "Poppins"),
-                backgroundColor: Colors.transparent,
-                shape: StadiumBorder(side: BorderSide(color: snacksSelected ? Color(0xFFF57C00) : Colors.grey)),
+                shape: StadiumBorder(side: BorderSide(color: snacksSelected ? darkColorSelect[0] : Colors.grey)),
               ),
               ChoiceChip(
                 label: Text("Water"),
@@ -160,10 +181,10 @@ class _MapScreenState extends State<MapScreen> {
                 },
                 elevation: waterSelected ? 5 : 0,
                 selected: waterSelected,
-                selectedColor: Color(0xFFFFBB97),
+                selectedColor: colorSelect[3],
+                disabledColor: Colors.black54,
                 labelStyle: TextStyle(color: Colors.black, fontFamily: "Poppins"),
-                backgroundColor: Colors.transparent,
-                shape: StadiumBorder(side: BorderSide(color: waterSelected ? Color(0xFFF57C00) : Colors.grey)),
+                shape: StadiumBorder(side: BorderSide(color: waterSelected ? darkColorSelect[3] : Colors.grey)),
               ),
               ChoiceChip(
                 label: Text("Restroom"),
@@ -175,10 +196,10 @@ class _MapScreenState extends State<MapScreen> {
                 },
                 elevation: restroomSelected ? 5 : 0,
                 selected: restroomSelected,
-                selectedColor: Color(0xFFFFBB97),
+                selectedColor: colorSelect[2],
+                disabledColor: Colors.black54,
                 labelStyle: TextStyle(color: Colors.black, fontFamily: "Poppins"),
-                backgroundColor: Colors.transparent,
-                shape: StadiumBorder(side: BorderSide(color: restroomSelected ? Color(0xFFF57C00) : Colors.grey)),
+                shape: StadiumBorder(side: BorderSide(color: restroomSelected ? darkColorSelect[2] : Colors.grey)),
               )
             ],
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -187,10 +208,11 @@ class _MapScreenState extends State<MapScreen> {
             child: FlutterMap(
               options: new MapOptions(
                   center: new LatLng(26.306167, -98.173148),
-                  zoom: 13.0,
+                  zoom: 15.0,
+                  maxZoom: 18.0,
                   plugins: [
                     UserLocationPlugin(),
-                  ]
+                  ],
               ),
               layers: [
                 new TileLayerOptions(
@@ -198,7 +220,7 @@ class _MapScreenState extends State<MapScreen> {
                   subdomains: ['a', 'b', 'c'],
                 ),
                 new MarkerLayerOptions(
-                  markers: markers
+                  markers: markers,
                 ),
                 userLocationOptions,
               ],
@@ -215,7 +237,12 @@ class _MapScreenState extends State<MapScreen> {
                   children: <Widget>[
                     ListTile(
                       title: Text(masterWorkingList[index].buildingCode),
-                      leading: CircleAvatar(backgroundColor: colorSelect[masterWorkingList[index].type], child: Text(masterWorkingList[index].buildingCode[0], style: TextStyle(color: Colors.white, fontSize: 20,),),),
+                      leading: Column(
+                        children: <Widget>[
+                          CircleAvatar(backgroundColor: colorSelect[masterWorkingList[index].type], child: Text(masterWorkingList[index].buildingCode[0], style: TextStyle(color: Colors.white, fontSize: 20,),),),
+                        ],
+                        mainAxisAlignment: MainAxisAlignment.center,
+                      ),
                       subtitle: Column(
                         children: <Widget>[
                           Text(masterWorkingList[index].loc),
@@ -239,12 +266,18 @@ class _MapScreenState extends State<MapScreen> {
                           )
                         ],
                         crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
                       ),
                       onTap: (){
-                        mapController.move(LatLng(masterWorkingList[index].lat, masterWorkingList[index].long), 18);
+                        //mapController.move(LatLng(masterWorkingList[index].lat, masterWorkingList[index].long), 18);
                         Navigator.push(context, MaterialPageRoute(builder: (context) => PinDetailsScreen(masterWorkingList[index])));
                       },
-                      trailing: Icon(CustomIcons.heart_filled),
+                      trailing: Column(
+                        children: <Widget>[
+                          Icon(CustomIcons.heart_filled)
+                        ],
+                        mainAxisAlignment: MainAxisAlignment.center,
+                      ),
                     ),
                     Divider(color: Colors.black54, endIndent: 15, indent: 15,)
                   ],
