@@ -170,6 +170,9 @@ class _MyHomePageState extends State<MyHomePage> {
           autofocus: true,
           style: TextStyle(fontSize: 27),
           onSubmitted: (String str){
+            //do some string manipulation
+            str = str.replaceAll(RegExp(r"([^\w])"), '');
+            str = str.toLowerCase();
             setState(() {
               isSearching = false;
             });
