@@ -13,9 +13,10 @@ class WaterFountainEntry extends Entry{
     super(id, 3, lat, long, image, buildingCode, loc);
 
   int createEntryDocument() {
-    print("I'M JUST A NEW MAN! YOU MAKE ME LIVE AGAIN!");
-    print(image.runtimeType);
     if (image is String) {
+      while(included.length != fountainStatuses.length) {
+        included.add(false);
+      }
       DocumentReference postRef = Firestore.instance.collection('locations')
           .document();
       postRef.setData({

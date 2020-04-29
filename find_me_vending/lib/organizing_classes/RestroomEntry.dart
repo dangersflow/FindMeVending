@@ -13,8 +13,10 @@ class RestroomEntry extends Entry{
         super(id, 2, lat, long, image, buildingCode, loc);
 
   int createEntryDocument() {
-    print("Now I'm there");
     if (image is String) {
+      while(included.length != restroomStatuses.length) {
+        included.add(false);
+      }
       DocumentReference postRef = Firestore.instance.collection('locations')
           .document();
       postRef.setData({

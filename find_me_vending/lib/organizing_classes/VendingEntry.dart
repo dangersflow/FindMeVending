@@ -24,8 +24,10 @@ class VendingEntry extends Entry{
   }
 
   int createEntryDocument() {
-    print("Now I'm here");
     if (image is String) {
+      while(status.length != vendingStatuses.length) {
+        status.add(false);
+      }
       DocumentReference postRef = Firestore.instance.collection('locations')
           .document();
       postRef.setData({
@@ -37,13 +39,13 @@ class VendingEntry extends Entry{
         "type": type,
         "statuses": status
       });
-      for (int i = 0; i < items.length; i++) {
+      for (int i = 0; i < included.length; i++) {
         Firestore.instance.collection('locations')
             .document('${postRef.documentID}').collection('items')
             .document().setData({
-          "low_stock": items[i].lowStock,
-          "name": items[i].name,
-          "other_names": items[i].otherNames
+          "low_stock": included[i].lowStock,
+          "name": included[i].name,
+          "other_names": included[i].otherNames
         });
       }
 
