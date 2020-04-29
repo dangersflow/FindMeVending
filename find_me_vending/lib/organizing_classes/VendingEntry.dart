@@ -37,7 +37,7 @@ class VendingEntry extends Entry{
         "loc": GeoPoint(lat, long),
         "location_description": loc,
         "type": type,
-        "statuses": status
+        "status": status
       });
       for (int i = 0; i < included.length; i++) {
         Firestore.instance.collection('locations')
