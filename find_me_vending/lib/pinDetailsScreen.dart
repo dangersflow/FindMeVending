@@ -7,6 +7,7 @@ import 'package:latlong/latlong.dart';
 import 'package:findmevending/organizing_classes/VendingEntry.dart';
 import 'package:findmevending/organizing_classes/FountainEntry.dart';
 import 'package:findmevending/organizing_classes/RestroomEntry.dart';
+import 'package:provider/provider.dart';
 
 class PinDetailsScreen extends StatefulWidget {
   Entry pin;
@@ -22,6 +23,8 @@ class _PinDetailsScreenState extends State<PinDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<EntryList>(context, listen: false).reopen();
+
     userLocationOptions = UserLocationOptions(
       context: context,
       mapController: mapController,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:findmevending/organizing_classes/LocationEntry.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 const List<String> fountainStatuses = <String>["Water Refiller"];
 const List<Color> fountainStatusesColors = [Color(0xFFB2DFFB)];
@@ -10,6 +11,28 @@ class WaterFountainEntry extends Entry{
 
   WaterFountainEntry(String id, double lat, double long, var image, String buildingCode, String loc, this.included) :
     super(id, 3, lat, long, image, buildingCode, loc);
+
+  int createEntryDocument() {
+    print("I'M JUST A NEW MAN! YOU MAKE ME LIVE AGAIN!");
+    print(image.runtimeType);
+    if (image is String) {
+      DocumentReference postRef = Firestore.instance.collection('locations')
+          .document();
+      postRef.setData({
+        'building_code': buildingCode,
+        "id": postRef.documentID,
+        "image_url": image,
+        "loc": GeoPoint(lat, long),
+        "location_description": loc,
+        "type": type,
+        "included": included
+      });
+      return 0;
+    }
+    else {
+      return -1;
+    }
+  }
 }
 
 WaterFountainEntry testFountain =

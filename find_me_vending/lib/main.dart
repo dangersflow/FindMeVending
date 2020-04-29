@@ -11,6 +11,7 @@ import 'package:flutter_map/plugin_api.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:findmevending/organizing_classes/UserEntry.dart';
 import 'package:findmevending/organizing_classes/LocationEntry.dart';
+import 'package:provider/provider.dart';
 
 //important variables
 var myProfile = ProfileScreen(key: PageStorageKey("Page2"),);
@@ -61,7 +62,7 @@ Map<int, Color> colorSelect = {
 
 bool isSearching = false;
 
-void main() => runApp(MyApp());
+void main() => runApp(ChangeNotifierProvider(create: (context) => EntryList(), child: MyApp()));
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application
@@ -146,7 +147,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-
     final List<Widget> _widgetOptions = <Widget>[
       HomeScreen(key: PageStorageKey("Page1"), callback: callback,),
       myProfile,

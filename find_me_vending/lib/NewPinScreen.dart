@@ -12,6 +12,7 @@ import 'package:findmevending/organizing_classes/LocationEntry.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart' as Path;
+import 'package:provider/provider.dart';
 
 List<String> types = <String>["Food Vending", "Drink Vending", "Restroom", "Water Fountain"];
 Color textFieldColor = Colors.grey[350];
@@ -40,7 +41,8 @@ class _NewPinScreenState extends State<NewPinScreen> {
   var _image;
   String _imageURL;
 
-  void submit() {
+  Future<void> submit() async{
+    await uploadFile();
     Entry entry;
     if(_selection == 0 || _selection == 1) {
       while(itemsControllers[itemsControllers.length-1].text.length == 0) {
@@ -50,31 +52,29 @@ class _NewPinScreenState extends State<NewPinScreen> {
       for(int i = 0; i < itemsControllers.length; i++) {
         items.add(Item("", itemsControllers[i].text, false));
       }
-      entry = VendingEntry("", _selection, point.latitude, point.longitude, _image, this.buildingCode.text, this.locationInstructions.text, items, statuses);
+      entry = VendingEntry("", _selection, point.latitude, point.longitude, _imageURL, this.buildingCode.text, this.locationInstructions.text, items, statuses);
     }
     else if(_selection == 2) {
-      entry = RestroomEntry("", point.latitude, point.longitude, _image, this.buildingCode.text, this.locationInstructions.text, statuses);
+      entry = RestroomEntry("", point.latitude, point.longitude, _imageURL, this.buildingCode.text, this.locationInstructions.text, statuses);
     }
     else {
-      entry = WaterFountainEntry("", point.latitude, point.longitude, _image, this.buildingCode.text, this.locationInstructions.text, statuses);
+      entry = WaterFountainEntry("", point.latitude, point.longitude, _imageURL, this.buildingCode.text, this.locationInstructions.text, statuses);
+    }
+
+    if(entry.createEntryDocument() != 0) {
+      print("ERROR");
     }
 
     masterlistEntries.add(entry);
-    uploadFile();
   }
 
   Future uploadFile() async {
-    print("FileName: ${Path.basename(_image.path)}");
     StorageReference storageReference = FirebaseStorage.instance.ref().child('${Path.basename(_image.path)}');
     StorageUploadTask uploadTask = storageReference.putFile(_image);
     await uploadTask.onComplete;
-    print("Upload Completed!");
-    storageReference.getDownloadURL().then((fileURL) {
-      setState(() {
-        _imageURL = fileURL;
-        print(_imageURL);
-      });
-    });
+    _imageURL = await storageReference.getDownloadURL();
+    _imageURL = _imageURL.toString();
+    print(_imageURL);
   }
 
   void initState() {
@@ -215,6 +215,7 @@ class _NewPinScreenState extends State<NewPinScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<EntryList>(context, listen: false).reopen();
 
     userLocationOptions = UserLocationOptions(
       context: context,

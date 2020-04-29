@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:findmevending/organizing_classes/LocationEntry.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 const List<String> restroomStatuses = <String>["Mens", "Womens", "Private", "Nursing"];
 const List<Color> restroomStatusesColors = [Color(0xFF87DFFC), Color(0xFFFFE2FF), Color(0xFFF2A365), Color(0xFFBE9FE1)];
@@ -10,6 +11,27 @@ class RestroomEntry extends Entry{
 
   RestroomEntry(String id, double lat, double long, var image, String buildingCode, String loc, this.included) :
         super(id, 2, lat, long, image, buildingCode, loc);
+
+  int createEntryDocument() {
+    print("Now I'm there");
+    if (image is String) {
+      DocumentReference postRef = Firestore.instance.collection('locations')
+          .document();
+      postRef.setData({
+        'building_code': buildingCode,
+        "id": postRef.documentID,
+        "image_url": image,
+        "loc": GeoPoint(lat, long),
+        "location_description": loc,
+        "type": type,
+        "included": included
+      });
+      return 0;
+    }
+    else {
+      return -1;
+    }
+  }
 }
 
 RestroomEntry testRestroom =

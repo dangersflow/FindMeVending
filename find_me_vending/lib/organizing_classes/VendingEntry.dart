@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:findmevending/organizing_classes/LocationEntry.dart';
 import 'package:findmevending/organizing_classes/ItemEntry.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 const List<String> vendingStatuses = ["Out of Order", "Cash Only"];
 const List<Color> vendingStatusesColors = [Color(0xFFF69D9D), Color(0xFF5AEF93)];
 
 class VendingEntry extends Entry{
   List<Item> included = [];
-  List<bool> status = [];
+  List<dynamic> status = [];
   
   VendingEntry(String id, int type, double lat, double long, var image, String buildingCode, String loc, this.included, this.status) : super(id, type, lat, long, image, buildingCode, loc);
 
@@ -19,6 +20,37 @@ class VendingEntry extends Entry{
     str = str.replaceAll(RegExp(' '), '');
     str = str.toLowerCase();
     return str;
+  }
+
+  int createEntryDocument() {
+    print("Now I'm here");
+    if (image is String) {
+      DocumentReference postRef = Firestore.instance.collection('locations')
+          .document();
+      postRef.setData({
+        'building_code': buildingCode,
+        "id": postRef.documentID,
+        "image_url": image,
+        "loc": GeoPoint(lat, long),
+        "location_description": loc,
+        "type": type,
+        "statuses": status
+      });
+      for (int i = 0; i < items.length; i++) {
+        Firestore.instance.collection('locations')
+            .document('${postRef.documentID}').collection('items')
+            .document().setData({
+          "low_stock": items[i].lowStock,
+          "name": items[i].name,
+          "other_names": items[i].otherNames
+        });
+      }
+
+      return 0;
+    }
+    else {
+      return -1;
+    }
   }
 }
 

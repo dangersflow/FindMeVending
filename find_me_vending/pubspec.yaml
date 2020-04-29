@@ -33,6 +33,7 @@ dependencies:
   statusbar: any
   image_picker: any
   firebase_storage: any
+  provider: any
 
 dev_dependencies:
   flutter_test:

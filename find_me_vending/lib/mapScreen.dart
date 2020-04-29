@@ -12,6 +12,7 @@ import 'package:user_location/user_location.dart';
 import 'package:latlong/latlong.dart';
 import 'package:findmevending/organizing_classes/LocationEntry.dart';
 import 'package:findmevending/pinDetailsScreen.dart';
+import 'package:provider/provider.dart';
 
 Map<int, Color> colorSelect = {
   0: const Color(0xFFF69D9D),
@@ -64,6 +65,8 @@ class _MapScreenState extends State<MapScreen> {
   bool snacksSelected = true;
   bool waterSelected = true;
   bool restroomSelected = true;
+
+  bool networkInitiated = false;
 
   void modifyMapInfo({String searchQuery = ""}){
     List<Entry> newWorkingList = [];
@@ -125,8 +128,20 @@ class _MapScreenState extends State<MapScreen> {
     print(markers.length);
   }
 
+  void networkInitiate(BuildContext context) {
+    if(!networkInitiated) {
+      Provider.of<EntryList>(context, listen: false)
+          .downloadAllEntryDocuments();
+      masterList = Provider.of<EntryList>(context, listen: true).get();
+      masterWorkingList = Provider.of<EntryList>(context, listen: false).get();
+      modifyMapInfo(searchQuery: searchQuery);
+      addMarkersFromList();
+    }
+    }
+
   @override
   Widget build(BuildContext context) {
+    networkInitiate(context);
     userLocationOptions = UserLocationOptions(
       context: context,
       mapController: mapController,
