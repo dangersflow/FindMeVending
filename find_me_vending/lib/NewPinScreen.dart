@@ -304,12 +304,11 @@ class _NewPinScreenState extends State<NewPinScreen> {
               childAspectRatio: 4,
             ),
             itemBuilder: (BuildContext context, int index) {
-              return Container(child:
-                Row(children: <Widget>[
+              return Row(children: <Widget>[
                       Radio(value: index, groupValue: _selection, onChanged: changeSelection,),
-                      Text(types[index], style: TextStyle(fontFamily: 'Poppins', fontSize: 18))
-              ]
-              ));
+                      Text(types[index], style: TextStyle(fontFamily: 'Poppins', fontSize: 16))
+              ],mainAxisAlignment: MainAxisAlignment.start,
+              );
             }),
             Align(child: Text("Building Code", style: TextStyle(fontSize: 32), ), alignment: Alignment.topLeft,),
             TextField(controller: buildingCode, style: TextStyle(fontFamily: 'Poppins'), decoration: dec,),
@@ -321,7 +320,7 @@ class _NewPinScreenState extends State<NewPinScreen> {
             (_selection == 0 || _selection == 1)?Column(children: items):Text("", style: TextStyle(fontSize: 1)),
             Column(children: statusBoxes),
             Align(alignment: Alignment.topRight, child: RaisedButton(
-              child: Text("SUBMIT", style: TextStyle(fontFamily: 'Poppins', color: Colors.white, fontSize: 18)),
+              child: Text("SUBMIT", style: TextStyle(fontFamily: 'Poppins', color: Colors.white, fontSize: 16)),
             color: Color(0xFF98BCBF),
             onPressed: ((){submit(); Navigator.pop(context);})
             ))

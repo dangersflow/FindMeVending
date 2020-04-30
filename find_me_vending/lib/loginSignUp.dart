@@ -166,7 +166,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Container signupScreen;
+    ListView signupScreen;
 
     TextField email = TextField(controller: _email, style: TextStyle(fontFamily: 'Poppins'), decoration: InputDecoration(filled: true, fillColor: textFieldColor, border: OutlineInputBorder()), keyboardType: TextInputType.emailAddress,);
     TextField name = TextField(controller: _name, style: TextStyle(fontFamily: 'Poppins'), decoration: InputDecoration(filled: true, fillColor: textFieldColor, border: OutlineInputBorder()), keyboardType: TextInputType.text);
@@ -179,23 +179,39 @@ class _SignUpScreenState extends State<SignUpScreen> {
         onPressed: (){_newUser(context, _email.text, _pword.text, _pword2.text, _name.text);}
     );
 
-    signupScreen = Container(
-      child: Column(
-        children: [
-          Align(child: Text("Email", style: TextStyle(fontSize: 27)), alignment: Alignment.topLeft,), Spacer(), email, Align(child: emailNotification, alignment: Alignment.topLeft,), Spacer(flex: 2),
-          Align(child: Text("Password", style: TextStyle(fontSize: 27)), alignment: Alignment.topLeft,), Spacer(), password, Spacer(flex: 2),
-          Align(child: Text("Confirm Password", style: TextStyle(fontSize: 27)), alignment: Alignment.topLeft,), Spacer(), password2, Align(child: passwordNotifcation, alignment: Alignment.topLeft,), Spacer(flex: 2),
-          Align(child: Text("Name", style: TextStyle(fontSize: 27)), alignment: Alignment.topLeft,), Spacer(), name, Spacer(flex: 2),
-          Align(child: signUp, alignment: Alignment.topRight,), Spacer(flex: 17)],
-      ),
-      padding: EdgeInsets.all(20),
-    );
+    signupScreen = ListView(
+        children: <Widget>[
+          Container(
+            child: Column(
+              children: [
+                Align(child: Text("Email", style: TextStyle(fontSize: 27)), alignment: Alignment.topLeft,),
+                email,
+                Container(padding: EdgeInsets.fromLTRB(0, 15, 0, 0),),
+                Align(child: emailNotification, alignment: Alignment.topLeft,),
+                Align(child: Text("Password", style: TextStyle(fontSize: 27)), alignment: Alignment.topLeft,),
+                password,
+                Container(padding: EdgeInsets.fromLTRB(0, 15, 0, 0),),
+                Align(child: Text("Confirm Password", style: TextStyle(fontSize: 27)), alignment: Alignment.topLeft,),
+                password2,
+                Container(padding: EdgeInsets.fromLTRB(0, 15, 0, 0),),
+                Align(child: passwordNotifcation, alignment: Alignment.topLeft,),
+                Align(child: Text("Name", style: TextStyle(fontSize: 27)), alignment: Alignment.topLeft,),
+                name,
+                Container(padding: EdgeInsets.fromLTRB(0, 10, 0, 0),),
+                Align(child: signUp, alignment: Alignment.topRight,),
+              ],
+            ),
+            padding: EdgeInsets.all(20),
+          )
+        ],
+      );
 
     return Scaffold(appBar:
         AppBar(
           title: Text("Register", style: TextStyle(fontSize: 27, color: Colors.white)),
           iconTheme: IconThemeData(color: Colors.white),
         ),
-        body: signupScreen);
+        body: signupScreen,
+        resizeToAvoidBottomPadding: true,);
   }
 }
